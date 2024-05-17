@@ -52,7 +52,8 @@ public class Startup
         {
             var services = scope.ServiceProvider;
             var dbContext = services.GetRequiredService<MotosContext>();
-            dbContext.Database.Migrate();
+            //dbContext.Database.Migrate();
+            dbContext.Database.ExecuteSqlRaw("Create TABLE IF NOT EXISTS \"Motos\" (Id SERIAL PRIMARY KEY, Ano int, Modelo VARCHAR(100), Placa VARCHAR(20));");
         }
 
         app.UseAuthorization();

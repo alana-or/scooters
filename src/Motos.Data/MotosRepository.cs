@@ -19,7 +19,7 @@ public class MotosRepository : IMotosRepository
     {
         try
         {
-            context.motos.Add(moto);
+            context.Motos.Add(moto);
             await context.SaveChangesAsync();
         }
         catch(Exception ex) 
@@ -33,7 +33,7 @@ public class MotosRepository : IMotosRepository
     {
         try
         {
-            context.motos.Update(moto);
+            context.Motos.Update(moto);
             await context.SaveChangesAsync();
         }
         catch(Exception ex) 
@@ -49,10 +49,10 @@ public class MotosRepository : IMotosRepository
         {
             if (string.IsNullOrWhiteSpace(placa))
             {
-                return await context.motos.ToListAsync();
+                return await context.Motos.ToListAsync();
             }
 
-            return await context.motos
+            return await context.Motos
                 .Where(x => x.placa == placa)
                 .ToListAsync();
         }

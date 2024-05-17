@@ -11,5 +11,5 @@ public class MotosContext : DbContext
 
     }
 
-    public DbSet<Moto> motos { get; set; }
+    public DbSet<Moto> Motos { get; set; }
 }
