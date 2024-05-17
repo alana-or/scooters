@@ -53,7 +53,7 @@ public class MotosRepository : IMotosRepository
             }
 
             return await context.Motos
-                .Where(x => x.placa == placa)
+                .Where(x => x.Placa == placa)
                 .ToListAsync();
         }
         catch (Exception ex)

@@ -24,8 +24,8 @@ public class Startup
         services.AddControllers();
 
         services.AddScoped<CreateMotoUseCase>();
-        services.AddScoped<SelectMotoUseCase>();
-        services.AddScoped<UpdateMotoUseCase>();
+        services.AddScoped<SelectMoto>();
+        services.AddScoped<UpdateMoto>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
@@ -52,8 +52,7 @@ public class Startup
         {
             var services = scope.ServiceProvider;
             var dbContext = services.GetRequiredService<MotosContext>();
-            //dbContext.Database.Migrate();
-            dbContext.Database.ExecuteSqlRaw("Create TABLE IF NOT EXISTS \"Motos\" (Id SERIAL PRIMARY KEY, Ano int, Modelo VARCHAR(100), Placa VARCHAR(20));");
+            dbContext.Database.Migrate();
         }
 
         app.UseAuthorization();

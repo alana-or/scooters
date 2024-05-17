@@ -1,20 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Motto.Entities;
 
+[Table("motos")]
 public class Moto
 {
     [Key]
-    public int id { get; set; }
+    [Column("id")]
+    public int Id { get; set; }
 
     [Required]
-    public int ano { get; set; }
+    [Column("ano")]
+    public int Ano { get; set; }
 
     [Required]
     [MaxLength(100)]
-    public string modelo { get; set; }
+    [Column("modelo")]
+    public string Modelo { get; set; }
 
     [Required]
     [MaxLength(20)]
-    public string placa { get; set; }
+    [Column("placa")]
+    public string Placa { get; set; }
+    
+    public Moto()
+    {
+        
+    }
 }

@@ -7,12 +7,12 @@ namespace Motto.Controllers;
 public class MotoController : ControllerBase
 {
     private readonly CreateMotoUseCase createMotoUseCase;
-    private readonly SelectMotoUseCase selectMotoUseCase;
-    private readonly UpdateMotoUseCase updateMotoUseCase;
+    private readonly SelectMoto selectMotoUseCase;
+    private readonly UpdateMoto updateMotoUseCase;
 
     public MotoController(CreateMotoUseCase createMotoUseCase, 
-        SelectMotoUseCase selectMotoUseCase,
-        UpdateMotoUseCase updateMotoUseCase)
+        SelectMoto selectMotoUseCase,
+        UpdateMoto updateMotoUseCase)
     {
         this.createMotoUseCase = createMotoUseCase;
         this.selectMotoUseCase = selectMotoUseCase;
@@ -33,10 +33,10 @@ public class MotoController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Motos([FromBody] CreateMotoRequest moto)
+    public async Task<IActionResult> Motos([FromBody] CreateMotoRequest moto)
     {
 
-        var response = createMotoUseCase.Handle(moto);
+        var response = await createMotoUseCase.Handle(moto);
      
         if (response.Success)
         {
@@ -47,9 +47,9 @@ public class MotoController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult MotosPut(UpdateMotoRequest moto)
+    public async Task<IActionResult> MotosPut(UpdateMotoRequest moto)
     {
-        var response = updateMotoUseCase.Handle(moto);
+        var response = await updateMotoUseCase.Handle(moto);
 
         if (response.Success)
         {
