@@ -13,7 +13,7 @@ public class SelectMotoUseCase
         this.logger = logger;
     }
 
-    public MotoResponse<IEnumerable<Moto>> Handle(MotoFilterRequest request)
+    public async Task<MotoResponse<IEnumerable<Moto>>> Handle(MotoFilterRequest request)
     {
         try
         {
@@ -23,7 +23,7 @@ public class SelectMotoUseCase
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while getting motos.");
-            return MotoResponse<IEnumerable<Moto>>.CreateFailureResponse("Erro ao buscar motos");
+            return MotoResponse<IEnumerable<Moto>>.CreateFailureResponse(ex.Message);
         }
     }
 }

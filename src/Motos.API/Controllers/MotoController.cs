@@ -20,13 +20,13 @@ public class MotoController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Motos([FromQuery] MotoFilterRequest motoFilter)
+    public async Task<IActionResult> Motos([FromQuery] MotoFilterRequest motoFilter)
     {
-        var response = selectMotoUseCase.Handle(motoFilter);
+        var response = await selectMotoUseCase.Handle(motoFilter);
 
         if (response.Success)
         {
-            return Ok(response.Message);
+            return Ok(response.Data);
         }
 
         return BadRequest(response.Message);
@@ -40,7 +40,7 @@ public class MotoController : ControllerBase
      
         if (response.Success)
         {
-            return Ok(response.Message);
+            return Ok(response.Data);
         }
 
         return BadRequest(response.Message);
@@ -53,7 +53,7 @@ public class MotoController : ControllerBase
 
         if (response.Success)
         {
-            return Ok(response.Message);
+            return Ok(response.Data);
         }
 
         return BadRequest(response.Message);

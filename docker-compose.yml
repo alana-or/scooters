@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  motos:
+    image: ${DOCKER_REGISTRY-}motos
+    build:
+      context: .
+      dockerfile: src/Motos.Api/Dockerfile
+    depends_on:
+      - motos_db
+      - rabbitmq
+    container_name: motos_app
+    ports:
+      - 5000:5000
+    environment:
+      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=motos_db;Port=5432;Database=motos_db; Integrated Security=true;
+      - ASPNETCORE_URLS=http://+:5000
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+      
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    container_name: motos_rabbit
+
+  motos_db:
+    image: postgres:latest
+    container_name: motos_db
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgrespw
+        - POSTGRES_DB=motos_db
+    ports:
+        - 5433:5432
+    restart: always
+    volumes:
+        - data:/var/lib/postgresql/data
+ 
+volumes:
+  data:    

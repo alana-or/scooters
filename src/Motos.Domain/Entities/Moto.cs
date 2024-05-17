@@ -1,9 +1,20 @@
-﻿namespace Motto.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Motto.Entities;
 
 public class Moto
 {
-    public Guid Id { get; set; }
-    public string Ano { get; set; }
-    public string Modelo { get; set; }
-    public string Placa { get; set; }
+    [Key]
+    public int id { get; set; }
+
+    [Required]
+    public int ano { get; set; }
+
+    [Required]
+    [MaxLength(100)]
+    public string modelo { get; set; }
+
+    [Required]
+    [MaxLength(20)]
+    public string placa { get; set; }
 }

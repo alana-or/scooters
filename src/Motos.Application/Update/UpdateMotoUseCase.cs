@@ -33,10 +33,9 @@ public class UpdateMotoUseCase
 
             var moto = new Moto
             {
-                Id = new Guid(),
-                Ano = request.Ano,
-                Modelo = request.Modelo,
-                Placa = request.Placa
+                ano = request.Ano,
+                modelo = request.Modelo,
+                placa = request.Placa
             };
 
             motoRepository.UpdateMoto(moto);
