@@ -20,11 +20,22 @@ public partial class InitialCreate : Migration
             {
                 table.PrimaryKey("PK_Motos", x => x.id);
             });
+
+
+        migrationBuilder.CreateTable(
+            name: "MotosLog2024",
+            columns: table => new
+            {
+                message = table.Column<int>(nullable: false),
+            });
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
             name: "Motos");
+
+        migrationBuilder.DropTable(
+            name: "MotosLog2024");
     }
 }

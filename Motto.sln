@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motos.Consumer", "src\Motos
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motos.Data", "src\Motos.Data\Motos.Data.csproj", "{E5745B1A-7C42-4632-8144-FFCE4A060A08}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motos.Domain", "src\Motos.Domain\Motos.Domain.csproj", "{A66EA738-EA94-491D-B39E-42E8F93C69EE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motos.Application", "src\Motos.Application\Motos.Application.csproj", "{BFAA86DA-D736-4FC4-867D-E966F392E083}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens da solution", "Itens da solution", "{C0EAAFF5-604A-4057-B365-CECF4BBEE610}"
@@ -42,10 +40,6 @@ Global
 		{E5745B1A-7C42-4632-8144-FFCE4A060A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5745B1A-7C42-4632-8144-FFCE4A060A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5745B1A-7C42-4632-8144-FFCE4A060A08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A66EA738-EA94-491D-B39E-42E8F93C69EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A66EA738-EA94-491D-B39E-42E8F93C69EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A66EA738-EA94-491D-B39E-42E8F93C69EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A66EA738-EA94-491D-B39E-42E8F93C69EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BFAA86DA-D736-4FC4-867D-E966F392E083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BFAA86DA-D736-4FC4-867D-E966F392E083}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFAA86DA-D736-4FC4-867D-E966F392E083}.Release|Any CPU.ActiveCfg = Release|Any CPU

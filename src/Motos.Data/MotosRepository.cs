@@ -62,4 +62,10 @@ public class MotosRepository : IMotosRepository
             throw;
         }
     }
+
+    public async Task SaveMoto2024(MotosLog2024 message)
+    {
+        context.MotosLog2024.Add(message);
+        await context.SaveChangesAsync();
+    }
 }
