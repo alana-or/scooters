@@ -1,15 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Motos.Consumer;
 using Motos.Data;
-using System;
 
 class Program
 {
     static void Main(string[] args)
     {
-        // Configuração do serviço de injeção de dependência
         var serviceProvider = new ServiceCollection()
             .AddSingleton<IMotosRepository, MotosRepository>()
+            .AddDbContext<MotosContext>(options =>
+                options.UseNpgsql("Host=motos_db;Port=5432;Username=postgres;Password=postgrespw;Database=motos_db;Search Path=public"))
             .AddTransient<MotosListener>(provider =>
                 new MotosListener(
                     hostname: "localhost",
@@ -22,6 +23,7 @@ class Program
 
         using (var listener = serviceProvider.GetRequiredService<MotosListener>())
         {
+            listener.StartListening();
             Console.WriteLine(" Press [enter] to exit.");
             Console.ReadLine();
         }

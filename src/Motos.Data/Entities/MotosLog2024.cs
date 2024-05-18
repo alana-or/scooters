@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Motto.Entities;
 
-[Table("motosLog2024")]
+[Table("motoslog2024")]
 public class MotosLog2024
 {
    

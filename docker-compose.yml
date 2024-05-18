@@ -18,6 +18,23 @@ services:
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__UserName=guest
       - RabbitMQ__Password=guest
+
+  consumer:
+    image: ${DOCKER_REGISTRY-}motos_consumer
+    build:
+      context: .
+      dockerfile: src/Motos.Consumer/Dockerfile
+    depends_on:
+      - motos_db
+      - rabbitmq
+    container_name: motos_consumer
+    ports:
+      - 7000:7000
+    environment:
+      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=motos_db;Port=5432;Database=motos_db; Integrated Security=true;
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
       
   rabbitmq:
     image: rabbitmq:3-management

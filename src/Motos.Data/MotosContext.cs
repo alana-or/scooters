@@ -28,7 +28,9 @@ public class MotosContext : DbContext
 
         modelBuilder.Entity<MotosLog2024>(entity =>
         {
-            entity.Property(m => m.Message).IsRequired().HasMaxLength(1000);
+            entity
+            .HasNoKey()
+            .Property(m => m.Message).IsRequired().HasMaxLength(1000);
         });
     }
 }

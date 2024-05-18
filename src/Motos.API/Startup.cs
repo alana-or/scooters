@@ -52,7 +52,7 @@ public class Startup
         {
             var services = scope.ServiceProvider;
             var dbContext = services.GetRequiredService<MotosContext>();
-            dbContext.Database.Migrate();
+            //dbContext.Database.Migrate();
         }
 
         app.UseAuthorization();

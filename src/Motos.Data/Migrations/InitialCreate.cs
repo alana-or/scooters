@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Motto.Entities;
 
 namespace Motos.Data.Migrations;
 
@@ -26,7 +28,7 @@ public partial class InitialCreate : Migration
             name: "MotosLog2024",
             columns: table => new
             {
-                message = table.Column<int>(nullable: false),
+                message = table.Column<string>(nullable: false),
             });
     }
 
