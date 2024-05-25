@@ -5,6 +5,7 @@ namespace Motos.Data;
 
 public class MotosContext : DbContext
 {
+    public MotosContext() { }
     public MotosContext(DbContextOptions<MotosContext> options)
         : base(options)
     {

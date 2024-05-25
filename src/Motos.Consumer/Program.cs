@@ -1,31 +1,70 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Motos.Consumer;
 using Motos.Data;
+using RabbitMQ.Client.Exceptions;
+
+namespace Motos.Consumer;
 
 class Program
 {
     static void Main(string[] args)
     {
+        var rabbitMQHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+        var rabbitMQPort = int.Parse(Environment.GetEnvironmentVariable("RABBITMQ_PORT"));
+        var rabbitMQUser = Environment.GetEnvironmentVariable("RABBITMQ_USER");
+        var rabbitMQPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+
         var serviceProvider = new ServiceCollection()
+            .AddLogging(config =>
+            {
+                config.AddConsole();
+                config.SetMinimumLevel(LogLevel.Information);
+            })
             .AddSingleton<IMotosRepository, MotosRepository>()
             .AddDbContext<MotosContext>(options =>
-                options.UseNpgsql("Host=motos_db;Port=5432;Username=postgres;Password=postgrespw;Database=motos_db;Search Path=public"))
-            .AddTransient<MotosListener>(provider =>
-                new MotosListener(
-                    hostname: "localhost",
+                options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString__DefaultConnection")))
+            .AddSingleton<MotosListener>(provider =>
+            {
+                var logger = provider.GetRequiredService<ILogger<MotosListener>>();
+                var motosRepository = provider.GetRequiredService<IMotosRepository>();
+                return new MotosListener(
+                    hostname: rabbitMQHost,
                     queueName: "motos_queue",
-                    username: "guest",
-                    password: "guest",
-                    motosRepository: provider.GetRequiredService<IMotosRepository>())
-            )
+                    username: rabbitMQUser,
+                    port: rabbitMQPort,
+                    password: rabbitMQPassword,
+                    motosRepository: motosRepository,
+                    logger: logger
+                );
+            })
             .BuildServiceProvider();
 
-        using (var listener = serviceProvider.GetRequiredService<MotosListener>())
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+
+        const int maxRetries = 2;
+        int retries = 0;
+
+        while (retries < maxRetries)
         {
-            listener.StartListening();
-            Console.WriteLine(" Press [enter] to exit.");
-            Console.ReadLine();
+            try
+            {
+                using (var listener = serviceProvider.GetRequiredService<MotosListener>())
+                {
+                    listener.StartListening();
+                    logger.LogInformation("MotosListener started. ");
+                }
+                break;
+            }
+            catch (BrokerUnreachableException ex)
+            {
+                retries++;
+                logger.LogError(ex, $"Attempt {retries} of {maxRetries}: Unable to reach RabbitMQ broker. Retrying in 5 seconds...");
+                Thread.Sleep(5000);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An unexpected error occurred.");
+                break;
+            }
         }
     }
 }

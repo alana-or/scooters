@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Motos.Application;
 using Motos.Application.Create.Validations;
 using Motos.Data;
 
@@ -16,12 +17,27 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddScoped<DbContext, MotosContext>();
+
         services.AddDbContext<MotosContext>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")).EnableDetailedErrors());
+            options.UseNpgsql(
+                Configuration.GetConnectionString("DefaultConnection"),
+                x => x.MigrationsAssembly("Motos.Data")).EnableDetailedErrors());
 
         services.AddScoped<IMotosRepository, MotosRepository>();
 
         services.AddControllers();
+
+        services.AddTransient<MotosPublisher>(provider =>
+        {
+            return new MotosPublisher(
+                hostname: "motos_rabbit",
+                queueName: "motos_queue",
+                username: "guest",
+                password: "guest",
+                port: 5672
+            );
+        });
 
         services.AddScoped<CreateMotoUseCase>();
         services.AddScoped<SelectMoto>();

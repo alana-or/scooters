@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Motos.Data;
-using Motto.Entities;
+
+namespace Motos.Application;
 
 public class SelectMoto
 {

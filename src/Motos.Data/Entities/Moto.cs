@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Motto.Entities;
+namespace Motos.Data;
 
 [Table("motos")]
 public class Moto

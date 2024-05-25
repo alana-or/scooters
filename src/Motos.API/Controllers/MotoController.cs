@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Motos.Application;
 
 namespace Motto.Controllers;
 

@@ -1,43 +1,47 @@
 version: '3.4'
 
 services:
-  motos:
+  motos_api:
     image: ${DOCKER_REGISTRY-}motos
     build:
       context: .
       dockerfile: src/Motos.Api/Dockerfile
     depends_on:
       - motos_db
-      - rabbitmq
+      - motos_rabbit
     container_name: motos_app
     ports:
       - 5000:5000
     environment:
       - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=motos_db;Port=5432;Database=motos_db; Integrated Security=true;
       - ASPNETCORE_URLS=http://+:5000
-      - RabbitMQ__Host=rabbitmq
-      - RabbitMQ__UserName=guest
-      - RabbitMQ__Password=guest
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_QUEUE=motos_queue
 
-  consumer:
+  motos_consumer:
     image: ${DOCKER_REGISTRY-}motos_consumer
     build:
       context: .
       dockerfile: src/Motos.Consumer/Dockerfile
     depends_on:
       - motos_db
-      - rabbitmq
+      - motos_rabbit
     container_name: motos_consumer
     ports:
       - 7000:7000
     environment:
       - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=motos_db;Port=5432;Database=motos_db; Integrated Security=true;
-      - RabbitMQ__Host=rabbitmq
-      - RabbitMQ__UserName=guest
-      - RabbitMQ__Password=guest
+      - RABBITMQ_HOST=motos_rabbit
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_QUEUE=motos_queue
       
-  rabbitmq:
-    image: rabbitmq:3-management
+  motos_rabbit:
+    image: rabbitmq:3.13-management
     ports:
         - "5672:5672"
         - "15672:15672"

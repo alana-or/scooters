@@ -1,21 +1,23 @@
 ﻿using RabbitMQ.Client;
 using System.Text;
 
-public class RabbitMQPublisher : IDisposable
+public class MotosPublisher : IDisposable
 {
     private readonly string _hostname;
     private readonly string _queueName;
     private readonly string _username;
     private readonly string _password;
+    private readonly int _port;
     private IConnection _connection;
     private RabbitMQ.Client.IModel _channel;
 
-    public RabbitMQPublisher(string hostname, string queueName, string username, string password)
+    public MotosPublisher(string hostname, string queueName, string username, string password, int port)
     {
         _hostname = hostname;
         _queueName = queueName;
         _username = username;
         _password = password;
+        _port = port;
 
         InitializeRabbitMQPublisher();
     }
@@ -26,7 +28,8 @@ public class RabbitMQPublisher : IDisposable
         {
             HostName = _hostname,
             UserName = _username,
-            Password = _password
+            Password = _password,
+            Port = _port
         };
 
         _connection = factory.CreateConnection();

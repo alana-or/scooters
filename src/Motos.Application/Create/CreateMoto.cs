@@ -1,24 +1,17 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Motos.Data;
-using Motto.Entities;
 using Newtonsoft.Json;
-using System;
 
-public class CreateMotoUseCase
+namespace Motos.Application;
+
+public class CreateMotoUseCase(IMotosRepository motoRepository,
+    IValidator<CreateMotoRequest> validator,
+    ILogger<CreateMotoUseCase> logger)
 {
-    private readonly IMotosRepository motoRepository;
-    private readonly ILogger<CreateMotoUseCase> logger;
-    private readonly IValidator<CreateMotoRequest> validator;
-
-    public CreateMotoUseCase(IMotosRepository motoRepository, 
-        IValidator<CreateMotoRequest> validator,
-        ILogger<CreateMotoUseCase> logger)
-    {
-        this.motoRepository = motoRepository;
-        this.validator = validator;
-        this.logger = logger;
-    }
+    private readonly IMotosRepository motoRepository = motoRepository;
+    private readonly ILogger<CreateMotoUseCase> logger = logger;
+    private readonly IValidator<CreateMotoRequest> validator = validator;
 
     public async Task<MotoResponse<Moto>> Handle(CreateMotoRequest request)
     {
@@ -52,21 +45,16 @@ public class CreateMotoUseCase
         }
     }
 
-    private void Publish(Moto moto)
+    private static void Publish(Moto moto)
     {
-        var hostname = "localhost";
-        var queueName = "your_queue_name";
-        var username = "guest";
-        var password = "guest";
-
-        // Publish a message
-        var publisher = new RabbitMQPublisher(hostname, queueName, username, password);
+        var publisher = new MotosPublisher(hostname: "motos_rabbit",
+                queueName: "motos_queue",
+                username: "guest",
+                password: "guest",
+                port: 5672);
 
         string message = JsonConvert.SerializeObject(moto);
         publisher.PublishMessage(message);
         publisher.Dispose();
-
-        Console.WriteLine(" Press [enter] to exit.");
-        Console.ReadLine();
     }
 }
