@@ -13,9 +13,9 @@ services:
     ports:
       - 5000:5000
     environment:
-      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=motos_db;Port=5432;Database=motos_db; Integrated Security=true;
+      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=motos_db;Port=5432;Database=motos_db; 
       - ASPNETCORE_URLS=http://+:5000
-      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_HOST=motos_rabbit
       - RABBITMQ_PORT=5672
       - RABBITMQ_USER=guest
       - RABBITMQ_PASSWORD=guest
@@ -33,7 +33,7 @@ services:
     ports:
       - 7000:7000
     environment:
-      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=motos_db;Port=5432;Database=motos_db; Integrated Security=true;
+      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=motos_db;Port=5432;Database=motos_db;
       - RABBITMQ_HOST=motos_rabbit
       - RABBITMQ_PORT=5672
       - RABBITMQ_USER=guest
