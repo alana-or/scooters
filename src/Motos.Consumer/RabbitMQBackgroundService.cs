@@ -73,7 +73,6 @@ public class RabbitMQBackgroundService : BackgroundService
                 var motosRepository = scope.ServiceProvider.GetRequiredService<IMotosRepository>();
                 await motosRepository.SaveMoto2024Async(new MotosLog2024(message));
             }
-            _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
         }; 
 
