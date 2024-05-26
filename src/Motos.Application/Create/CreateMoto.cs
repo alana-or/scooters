@@ -4,7 +4,7 @@ using Motos.Data;
 using Motos.Data.Entities;
 using Newtonsoft.Json;
 
-namespace Motos.Application;
+namespace Motos.Services;
 
 public class CreateMotoUseCase(IMotosRepository motoRepository,
     IValidator<CreateMotoRequest> validator,

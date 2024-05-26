@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Motos.Services.Create.Validations;
+namespace Motos.API.Services.Validations;
 
-public class UpdateMotoValidator : AbstractValidator<UpdateMotoRequest>
+public class CreateMotoValidator : AbstractValidator<CreateMotoRequest>
 {
-    public UpdateMotoValidator()
+    public CreateMotoValidator()
     {
         RuleFor(model => model.Ano)
             .NotEmpty()

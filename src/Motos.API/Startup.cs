@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Motos.Application;
-using Motos.Application.Create.Validations;
+using Motos.API.Services;
+using Motos.API.Services.Validations;
 using Motos.Data;
 
 namespace Motos;
@@ -27,9 +27,7 @@ public class Startup
 
         services.AddControllers();
 
-        services.AddScoped<CreateMotoUseCase>();
-        services.AddScoped<SelectMoto>();
-        services.AddScoped<UpdateMoto>();
+        services.AddScoped<IMotoService, MotoService>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();

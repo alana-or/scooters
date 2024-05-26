@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Motos.API.Services;
 
 namespace Motos.Services.Create.Validations;
 

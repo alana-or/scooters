@@ -2,7 +2,7 @@
 using Motos.Data;
 using Motos.Data.Entities;
 
-namespace Motos.Application;
+namespace Motos.Services;
 
 public class SelectMoto
 {

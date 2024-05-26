@@ -1,29 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Motos.Application;
+using Motos.API.Services;
 
-namespace Motto.Controllers;
+namespace Motos.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 public class MotoController : ControllerBase
 {
-    private readonly CreateMotoUseCase createMotoUseCase;
-    private readonly SelectMoto selectMotoUseCase;
-    private readonly UpdateMoto updateMotoUseCase;
+    private readonly IMotoService service;
 
-    public MotoController(CreateMotoUseCase createMotoUseCase, 
-        SelectMoto selectMotoUseCase,
-        UpdateMoto updateMotoUseCase)
+    public MotoController(IMotoService service)
     {
-        this.createMotoUseCase = createMotoUseCase;
-        this.selectMotoUseCase = selectMotoUseCase;
-        this.updateMotoUseCase = updateMotoUseCase;
+        this.service = service;
     }
 
     [HttpGet("Motos2024")]
     public async Task<IActionResult> Motos2024()
     {
-        var response = await selectMotoUseCase.Handle2024();
+        var response = await service.GetTop5LatestMotosLogsAsync();
 
         if (response.Success)
         {
@@ -36,7 +30,7 @@ public class MotoController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Motos([FromQuery] MotoFilterRequest motoFilter)
     {
-        var response = await selectMotoUseCase.Handle(motoFilter);
+        var response = await service.Get(motoFilter);
 
         if (response.Success)
         {
@@ -50,7 +44,7 @@ public class MotoController : ControllerBase
     public async Task<IActionResult> Motos([FromBody] CreateMotoRequest moto)
     {
 
-        var response = await createMotoUseCase.Handle(moto);
+        var response = await service.Create(moto);
      
         if (response.Success)
         {
@@ -63,7 +57,7 @@ public class MotoController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> MotosPut(UpdateMotoRequest moto)
     {
-        var response = await updateMotoUseCase.Handle(moto);
+        var response = await service.Update(moto);
 
         if (response.Success)
         {

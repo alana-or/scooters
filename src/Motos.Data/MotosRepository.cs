@@ -15,7 +15,7 @@ public class MotosRepository : IMotosRepository
         this.logger = logger;
     }
 
-    public async Task CreateMoto(Moto moto)
+    public async Task Create(Moto moto)
     {
         try
         {
@@ -29,7 +29,7 @@ public class MotosRepository : IMotosRepository
         }
     }
 
-    public async Task UpdateMoto(Moto moto)
+    public async Task Update(Moto moto)
     {
         try
         {

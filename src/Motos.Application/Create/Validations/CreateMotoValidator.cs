@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Motos.Application.Create.Validations;
+namespace Motos.Services.Create.Validations;
 
 public class CreateMotoValidator : AbstractValidator<CreateMotoRequest>
 {
