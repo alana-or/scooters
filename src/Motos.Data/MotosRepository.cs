@@ -68,7 +68,9 @@ public class MotosRepository : IMotosRepository
         try
         {
             return await context.MotosLog2024
-                .ToListAsync();
+               .OrderByDescending(x => x.Id) 
+               .Take(5)
+               .ToListAsync();
         }
         catch (Exception ex)
         {
