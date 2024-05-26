@@ -13,9 +13,7 @@ public class RabbitMQBackgroundService : BackgroundService
     private readonly string _rabbitMQUser;
     private readonly string _rabbitMQPassword;
     private readonly string _rabbitMQQueue;
-    private IConnection _connection;
-    private IModel _channel;
-    private const int _intervaloMensagemWorkerAtivo = 5000;
+    private const int _time = 5000;
 
     public RabbitMQBackgroundService(
         ILogger<RabbitMQBackgroundService> logger,
@@ -27,7 +25,6 @@ public class RabbitMQBackgroundService : BackgroundService
         string rabbitMQQueue
         )
     {
-
         _logger = logger;
 
         _serviceScopeFactory = serviceScopeFactory;
@@ -84,7 +81,7 @@ public class RabbitMQBackgroundService : BackgroundService
         {
             _logger.LogInformation(
                 $"Worker ativo em: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
-            await Task.Delay(_intervaloMensagemWorkerAtivo, stoppingToken);
+            await Task.Delay(_time, stoppingToken);
         }
     }
 }

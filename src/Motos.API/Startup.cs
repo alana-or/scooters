@@ -50,13 +50,6 @@ public class Startup
         app.UseSwaggerUI();
         ConfigureRedirectToSwagger(app);
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-            var dbContext = services.GetRequiredService<MotosContext>();
-            //dbContext.Database.Migrate();
-        }
-
         app.UseAuthorization();
 
         app.MapControllers();
