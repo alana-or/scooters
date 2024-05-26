@@ -24,7 +24,7 @@ public class MotosRepository : IMotosRepository
         }
         catch(Exception ex) 
         {
-            logger.LogError(ex, "An error occurred while getting motos.");
+            logger.LogError(ex, "An error occurred while creating moto.");
             throw;
         }
     }
@@ -38,7 +38,7 @@ public class MotosRepository : IMotosRepository
         }
         catch(Exception ex) 
         {
-            logger.LogError(ex, "An error occurred while getting motos.");
+            logger.LogError(ex, "An error occurred while updating moto.");
             throw;
         }
     }
@@ -74,7 +74,7 @@ public class MotosRepository : IMotosRepository
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "An error occurred while getting motos.");
+            logger.LogError(ex, "An error occurred while getting motos log.");
             throw;
         }
     }
