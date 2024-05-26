@@ -29,17 +29,17 @@ public class Startup
             var rabbitMQPort = int.Parse(Environment.GetEnvironmentVariable("RABBITMQ_PORT"));
             var rabbitMQUser = Environment.GetEnvironmentVariable("RABBITMQ_USER");
             var rabbitMQPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
-
+            var rabbitMQQueue = Environment.GetEnvironmentVariable("RABBITMQ_QUEUE");
+           
             return new RabbitMQBackgroundService(
                 logger,
                 serviceScopeFactory,
                 rabbitMQHost,
-                rabbitMQPort,
                 rabbitMQUser,
-                rabbitMQPassword
+                rabbitMQPassword,
+                rabbitMQPort,
+                rabbitMQQueue
             );
         });
     }
-
-
 }
