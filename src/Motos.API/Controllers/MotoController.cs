@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Motos.API.Models;
 using Motos.API.Services;
 
 namespace Motos.Controllers;

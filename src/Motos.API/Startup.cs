@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Motos.API.Services;
-using Motos.API.Services.Validations;
+using Motos.API.Validations;
 using Motos.Data;
 
 namespace Motos;

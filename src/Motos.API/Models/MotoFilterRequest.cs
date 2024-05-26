@@ -1,4 +1,4 @@
-﻿namespace Motos.API.Services;
+﻿namespace Motos.API.Models;
 
 public class MotoFilterRequest
 {

@@ -1,6 +1,6 @@
-﻿namespace Motos.API.Services;
+﻿namespace Motos.API.Models;
 
-public class CreateMotoRequest
+public class UpdateMotoRequest
 {
     public int Ano { get; set; }
     public string Modelo { get; set; }

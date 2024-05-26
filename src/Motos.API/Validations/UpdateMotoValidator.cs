@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Motos.API.Services;
+using Motos.API.Models;
 
-namespace Motos.Services.Create.Validations;
+namespace Motos.API.Validations;
 
 public class UpdateMotoValidator : AbstractValidator<UpdateMotoRequest>
 {

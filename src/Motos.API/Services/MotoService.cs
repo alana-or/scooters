@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Motos.API.Models;
 using Motos.Data;
 using Motos.Data.Entities;
 using Newtonsoft.Json;
