@@ -20,6 +20,19 @@ public class MotoController : ControllerBase
         this.updateMotoUseCase = updateMotoUseCase;
     }
 
+    [HttpGet("Motos2024")]
+    public async Task<IActionResult> Motos2024()
+    {
+        var response = await selectMotoUseCase.Handle2024();
+
+        if (response.Success)
+        {
+            return Ok(response.Data);
+        }
+
+        return BadRequest(response.Message);
+    }
+
     [HttpGet]
     public async Task<IActionResult> Motos([FromQuery] MotoFilterRequest motoFilter)
     {

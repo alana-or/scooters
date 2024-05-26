@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Motto.Entities;
+namespace Motos.Data.Entities;
 
 [Table("motoslog2024")]
 public class MotosLog2024
 {
-   
+    [Key]
+    [Column("id")]
+    public int Id { get; set; }
+
     [Required]
     [MaxLength(1000)]
     [Column("message")]

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Motto.Entities;
+using Motos.Data.Entities;
 
 namespace Motos.Data;
 
@@ -63,9 +63,31 @@ public class MotosRepository : IMotosRepository
         }
     }
 
-    public async Task SaveMoto2024(MotosLog2024 message)
+    public async Task<IEnumerable<MotosLog2024>> GetMoto2024Async()
     {
-        context.MotosLog2024.Add(message);
-        await context.SaveChangesAsync();
+        try
+        {
+            return await context.MotosLog2024
+                .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while getting motos.");
+            throw;
+        }
+    }
+
+    public async Task SaveMoto2024Async(MotosLog2024 message)
+    {
+        try
+        {
+            context.MotosLog2024.Add(message);
+            await context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while creating motos log.");
+            throw;
+        }
     }
 }

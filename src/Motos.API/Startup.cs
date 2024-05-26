@@ -21,23 +21,11 @@ public class Startup
 
         services.AddDbContext<MotosContext>(options =>
             options.UseNpgsql(
-                Configuration.GetConnectionString("DefaultConnection"),
-                x => x.MigrationsAssembly("Motos.Data")).EnableDetailedErrors());
+                Configuration.GetConnectionString("DefaultConnection")).EnableDetailedErrors());
 
         services.AddScoped<IMotosRepository, MotosRepository>();
 
         services.AddControllers();
-
-        services.AddTransient<MotosPublisher>(provider =>
-        {
-            return new MotosPublisher(
-                hostname: "motos_rabbit",
-                queueName: "motos_queue",
-                username: "guest",
-                password: "guest",
-                port: 5672
-            );
-        });
 
         services.AddScoped<CreateMotoUseCase>();
         services.AddScoped<SelectMoto>();

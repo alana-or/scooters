@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Motos.Data;
+using Motos.Data.Entities;
 
 namespace Motos.Application;
 

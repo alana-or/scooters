@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Motto.Entities;
+using Motos.Data.Entities;
 
 namespace Motos.Data;
 
@@ -29,9 +29,8 @@ public class MotosContext : DbContext
 
         modelBuilder.Entity<MotosLog2024>(entity =>
         {
-            entity
-            .HasNoKey()
-            .Property(m => m.Message).IsRequired().HasMaxLength(1000);
+            entity.HasKey(m => m.Id);
+            entity.Property(m => m.Message).IsRequired().HasMaxLength(1000);
         });
     }
 }
