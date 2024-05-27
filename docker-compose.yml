@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   motos_api:
     image: ${DOCKER_REGISTRY-}motos
