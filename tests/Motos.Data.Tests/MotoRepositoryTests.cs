@@ -1,10 +1,8 @@
-using AutoBogus;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Motos.Data;
 using Motos.Data.Builders;
 using Motos.Data.Entities;
 using Testcontainers.PostgreSql;
@@ -72,7 +70,7 @@ public class MotoRepositoryTests
             var motosRepository = scope.ServiceProvider.GetRequiredService<IMotosRepository>();
             var context = scope.ServiceProvider.GetRequiredService<MotosContext>();
 
-            var moto = new Moto { Id = 101, Ano = 2023, Modelo = "Model", Placa = "123" };
+            var moto = new MotoDB { Id = 101, Ano = 2023, Modelo = "Model", Placa = "123" };
 
             await motosRepository.Create(moto);
 
@@ -93,7 +91,7 @@ public class MotoRepositoryTests
 
             DisposeDataBase(scope);
 
-            Func<Task> act = async () => await motosRepository.Create(new Moto());
+            Func<Task> act = async () => await motosRepository.Create(new MotoDB());
 
             await act.Should().ThrowAsync<Exception>();
             VerifyThrowExeption("An error occurred while creating moto.", LogLevel.Error, Times.Once());
@@ -108,7 +106,7 @@ public class MotoRepositoryTests
             var motosRepository = scope.ServiceProvider.GetRequiredService<IMotosRepository>();
             var context = scope.ServiceProvider.GetRequiredService<MotosContext>();
 
-            var moto = new Moto { Id = 101, Ano = 2023, Modelo = "Old Model", Placa = "OLD123" };
+            var moto = new MotoDB { Id = 101, Ano = 2023, Modelo = "Old Model", Placa = "OLD123" };
             context.Motos.Add(moto);
             await context.SaveChangesAsync();
 
@@ -134,7 +132,7 @@ public class MotoRepositoryTests
 
             DisposeDataBase(scope);
 
-            Func<Task> act = async () => await motosRepository.Update(new Moto());
+            Func<Task> act = async () => await motosRepository.Update(new MotoDB());
 
             await act.Should().ThrowAsync<Exception>();
             VerifyThrowExeption("An error occurred while updating moto.", LogLevel.Error, Times.Once());
@@ -171,7 +169,7 @@ public class MotoRepositoryTests
 
             var motos = new MotoBuilder().Generate(5);
 
-            var specificMoto = new Moto { Ano = 2023, Modelo = "Specific Model", Placa = "ABC123" };
+            var specificMoto = new MotoDB { Ano = 2023, Modelo = "Specific Model", Placa = "ABC123" };
             motos.Add(specificMoto);
 
             context.Motos.AddRange(motos);

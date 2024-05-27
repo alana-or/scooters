@@ -5,11 +5,11 @@ namespace Motos.Data.Builders;
 
 public class MotoBuilder
 {
-    private Moto _moto;
+    private MotoDB _moto;
 
     public MotoBuilder()
     {
-        _moto = new AutoFaker<Moto>()
+        _moto = new AutoFaker<MotoDB>()
             .RuleFor(m => m.Ano, f => f.Random.Int(1960, 2030))
             .RuleFor(m => m.Id, f => 0)
             .RuleFor(m => m.Placa, f => f.Random.String2(1, 20))
@@ -17,9 +17,9 @@ public class MotoBuilder
             .Generate();
     }
 
-    public List<Moto> Generate(int quant)
+    public List<MotoDB> Generate(int quant)
     {
-        return new AutoFaker<Moto>()
+        return new AutoFaker<MotoDB>()
             .RuleFor(m => m.Ano, f => f.Random.Int(1960, 2030))
             .RuleFor(m => m.Id, f => 0)
             .RuleFor(m => m.Placa, f => f.Random.String2(1, 20))
@@ -45,7 +45,7 @@ public class MotoBuilder
         return this;
     }
 
-    public Moto Build()
+    public MotoDB Build()
     {
         return _moto;
     }

@@ -12,7 +12,7 @@ public class MotosContext : DbContext
 
     }
 
-    public DbSet<Moto> Motos { get; set; }
+    public DbSet<MotoDB> Motos { get; set; }
     public DbSet<MotosLog2024> MotosLog2024 { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,7 +27,7 @@ public class MotosContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Moto>(entity =>
+        modelBuilder.Entity<MotoDB>(entity =>
         {
             entity.HasKey(m => m.Id);
             entity.Property(m => m.Modelo).IsRequired().HasMaxLength(100);

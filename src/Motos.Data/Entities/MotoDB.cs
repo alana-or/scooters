@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Motos.Data.Entities;
 
 [Table("motos")]
-public class Moto
+public class MotoDB
 {
     [Key]
     [Column("id")]
@@ -24,7 +24,7 @@ public class Moto
     [Column("placa")]
     public string Placa { get; set; }
     
-    public Moto()
+    public MotoDB()
     {
         
     }

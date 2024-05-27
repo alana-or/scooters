@@ -15,7 +15,7 @@ public class MotosRepository : IMotosRepository
         this.logger = logger;
     }
 
-    public async Task Create(Moto moto)
+    public async Task Create(MotoDB moto)
     {
         try
         {
@@ -29,7 +29,7 @@ public class MotosRepository : IMotosRepository
         }
     }
 
-    public async Task Update(Moto moto)
+    public async Task Update(MotoDB moto)
     {
         try
         {
@@ -43,7 +43,7 @@ public class MotosRepository : IMotosRepository
         }
     }
 
-    public async Task<IEnumerable<Moto>> GetMotoAsync(string? placa)
+    public async Task<IEnumerable<MotoDB>> GetMotoAsync(string? placa)
     {
         try
         {

@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
+using Motos.API.Domain;
 using Motos.API.Models;
 using Motos.Data;
 using Motos.Data.Entities;
@@ -8,9 +10,9 @@ namespace Motos.API.Services;
 
 public interface IMotoService
 {
-    public Task<MotoResponse<Moto>> Create(CreateMotoRequest request);
-    public Task<MotoResponse<Moto>> Update(UpdateMotoRequest request);
-    public Task<MotoResponse<IEnumerable<Moto>>> Get(MotoFilterRequest request);
+    public Task<MotoResponse<MotoDB>> Create(CreateMotoRequest request);
+    public Task<MotoResponse<MotoDB>> Update(UpdateMotoRequest request);
+    public Task<MotoResponse<IEnumerable<MotoDB>>> Get(MotoFilterRequest request);
     public Task<MotoResponse<IEnumerable<MotosLog2024>>> GetTop5LatestMotosLogsAsync();
 }
 
@@ -20,19 +22,22 @@ public class MotoService : IMotoService
     private readonly ILogger<MotoService> logger;
     private readonly IValidator<CreateMotoRequest> validatorCreate;
     private readonly IValidator<UpdateMotoRequest> validatorUpdate;
+    private readonly IMapper mapper;
 
     public MotoService(IMotosRepository motoRepository,
         ILogger<MotoService> logger,
         IValidator<CreateMotoRequest> validatorCreate, 
-        IValidator<UpdateMotoRequest> validatorUpdate)
+        IValidator<UpdateMotoRequest> validatorUpdate,
+        IMapper mapper)
     {
         this.validatorCreate = validatorCreate;
         this.validatorUpdate = validatorUpdate;
         this.logger = logger;
         this.motoRepository = motoRepository;
+        this.mapper = mapper;
     }
 
-    public async Task<MotoResponse<Moto>> Create(CreateMotoRequest request)
+    public async Task<MotoResponse<MotoDB>> Create(CreateMotoRequest request)
     {
         try
         {
@@ -40,7 +45,7 @@ public class MotoService : IMotoService
 
             if (!validation.IsValid)
             {
-                return MotoResponse<Moto>.CreateFailureResponse("Os dados da requisição estão incorretos");
+                return MotoResponse<MotoDB>.CreateFailureResponse("Os dados da requisição estão incorretos");
             }
 
             var moto = new Moto
@@ -50,11 +55,13 @@ public class MotoService : IMotoService
                 Placa = request.Placa
             };
 
-            await motoRepository.Create(moto);
+            var motoDB = mapper.Map<MotoDB>(moto);
 
-            Publish(moto);
+            await motoRepository.Create(motoDB);
 
-            return MotoResponse<Moto>.CreateSuccessResponse(moto);
+            moto.Publish();
+
+            return MotoResponse<MotoDB>.CreateSuccessResponse(motoDB);
 
         }
         catch (Exception ex)
@@ -64,7 +71,7 @@ public class MotoService : IMotoService
         }
     }
 
-    public async Task<MotoResponse<Moto>> Update(UpdateMotoRequest request)
+    public async Task<MotoResponse<MotoDB>> Update(UpdateMotoRequest request)
     {
         try
         {
@@ -72,11 +79,11 @@ public class MotoService : IMotoService
 
             if (!validation.IsValid)
             {
-                return MotoResponse<Moto>
+                return MotoResponse<MotoDB>
                     .CreateFailureResponse("Os dados da requisição estão incorretos");
             }
 
-            var moto = new Moto
+            var moto = new MotoDB
             {
                 Ano = request.Ano,
                 Modelo = request.Modelo,
@@ -85,7 +92,7 @@ public class MotoService : IMotoService
 
             await motoRepository.Update(moto);
 
-            return MotoResponse<Moto>.CreateSuccessResponse(moto);
+            return MotoResponse<MotoDB>.CreateSuccessResponse(moto);
 
         }
         catch (Exception ex)
@@ -95,17 +102,17 @@ public class MotoService : IMotoService
         }
     }
 
-    public async Task<MotoResponse<IEnumerable<Moto>>> Get(MotoFilterRequest request)
+    public async Task<MotoResponse<IEnumerable<MotoDB>>> Get(MotoFilterRequest request)
     {
         try
         {
             var response = await motoRepository.GetMotoAsync(request.Placa);
-            return MotoResponse<IEnumerable<Moto>>.CreateSuccessResponse(response);
+            return MotoResponse<IEnumerable<MotoDB>>.CreateSuccessResponse(response);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while getting motos.");
-            return MotoResponse<IEnumerable<Moto>>.CreateFailureResponse(ex.Message);
+            return MotoResponse<IEnumerable<MotoDB>>.CreateFailureResponse(ex.Message);
         }
     }
 
@@ -121,18 +128,5 @@ public class MotoService : IMotoService
             logger.LogError(ex, "An error occurred while getting motos.");
             return MotoResponse<IEnumerable<MotosLog2024>>.CreateFailureResponse(ex.Message);
         }
-    }
-
-    private static void Publish(Moto moto)
-    {
-        var publisher = new MotosPublisher(hostname: "motos_rabbit",
-                queueName: "motos_queue",
-                username: "guest",
-                password: "guest",
-                port: 5672);
-
-        string message = JsonConvert.SerializeObject(moto);
-        publisher.PublishMessage(message);
-        publisher.Dispose();
     }
 }

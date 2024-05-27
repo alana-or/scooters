@@ -25,6 +25,8 @@ public class Startup
 
         services.AddScoped<IMotosRepository, MotosRepository>();
 
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         services.AddControllers();
 
         services.AddScoped<IMotoService, MotoService>();
