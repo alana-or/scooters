@@ -6,7 +6,7 @@
     <ProjectGuid>b587e9f8-be76-469d-b34f-47d0cea38fc5</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>motos_api</DockerServiceName>
+    <DockerServiceName>scooters_api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
