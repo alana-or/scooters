@@ -8,12 +8,9 @@ using Microsoft.OpenApi.Models;
 
 namespace Deliveries.Api;
 
-public class Startup
+public class Startup(IConfiguration configuration)
 {
-    public IConfiguration Configuration { get; }
-
-    public Startup(IConfiguration configuration)
-        => Configuration = configuration;
+    public IConfiguration Configuration { get; } = configuration;
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -40,7 +37,7 @@ public class Startup
             options.SwaggerDoc("v1", new OpenApiInfo()
             {
                 Version = "v1",
-                Title = "Motos API",
+                Title = "Deliveries Api",
                 Description = "O sistema é.",
             });
         });

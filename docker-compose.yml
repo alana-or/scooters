@@ -1,91 +1,136 @@
 services:
-  scooters_api:
-    image: ${DOCKER_REGISTRY-}scooters
+  # scooters_api:
+  #   image: ${DOCKER_REGISTRY-}scooters
+  #   build:
+  #     context: .
+  #     dockerfile: src/Scooters.Api/Dockerfile
+  #   depends_on:
+  #     - scooters_db
+  #     - scooters_rabbit
+  #   container_name: scooters_api
+  #   ports:
+  #     - 5000:5000
+  #   environment:
+  #     - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=scooters_db;Port=5432;Database=scooters_db; 
+  #     - ASPNETCORE_URLS=http://+:5000
+  #     - RABBITMQ_HOST=scooters_rabbit
+  #     - RABBITMQ_PORT=5672
+  #     - RABBITMQ_USER=guest
+  #     - RABBITMQ_PASSWORD=guest
+  #     - RABBITMQ_QUEUE=scooters_queue
+  #   networks:
+  #     - scooters_network
+
+  deliveries_api:
+    image: ${DOCKER_REGISTRY-}deliveries
     build:
       context: .
-      dockerfile: src/Scooters.Api/Dockerfile
+      dockerfile: src/Deliveries.Api/Dockerfile
     depends_on:
-      - scooters_db
-      - scooters_rabbit
-      - scooters_migration
-    container_name: scooters_api
+      - deliveries_db
+      # - scooters_api
+    container_name: deliveries_api
     ports:
-      - 5000:5000
+      - 5001:5001
     environment:
-      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=scooters_db;Port=5432;Database=scooters_db; 
-      - ASPNETCORE_URLS=http://+:5000
-      - RABBITMQ_HOST=scooters_rabbit
-      - RABBITMQ_PORT=5672
-      - RABBITMQ_USER=guest
-      - RABBITMQ_PASSWORD=guest
-      - RABBITMQ_QUEUE=scooters_queue
+      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=deliveries_db;Port=5432;Database=deliveries_db; 
+      - ASPNETCORE_URLS=http://+:5001
     networks:
-      - scooters_network
+      # - scooters_network
+      - deliveries_network
       
-  scooters_migration:
+  # scooters_migration:
+  #   build:
+  #     context: .
+  #     dockerfile: src/Scooters.Data/Dockerfile
+  #   container_name: scooters_migration
+  #   depends_on:
+  #     - scooters_db
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #   networks:
+  #     - scooters_network
+      
+  deliveries_migration:
     build:
       context: .
-      dockerfile: src/Scooters.Data/Dockerfile
+      dockerfile: src/Deliveries.Data/Dockerfile
+    container_name: deliveries_migration
     depends_on:
-      - scooters_db
+      - deliveries_db
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    command: ["dotnet", "ef", "database", "update"]
     networks:
-      - scooters_network
+      - deliveries_network
 
-  scooters_consumer:
-    image: ${DOCKER_REGISTRY-}scooters_consumer
-    build:
-      context: .
-      dockerfile: src/Scooters.Consumer/Dockerfile
-    depends_on:
-      - scooters_db
-      - scooters_rabbit
-      - scooters_migration
-    container_name: scooters_consumer
-    ports:
-      - 7000:7000
-    environment:
-      - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=scooters_db;Port=5432;Database=scooters_db;
-      - RABBITMQ_HOST=scooters_rabbit
-      - RABBITMQ_PORT=5672
-      - RABBITMQ_USER=guest
-      - RABBITMQ_PASSWORD=guest
-      - RABBITMQ_QUEUE=scooters_queue
-    networks:
-      - scooters_network
+  # scooters_consumer:
+  #   image: ${DOCKER_REGISTRY-}scooters_consumer
+  #   build:
+  #     context: .
+  #     dockerfile: src/Scooters.Consumer/Dockerfile
+  #   depends_on:
+  #     - scooters_db
+  #     - scooters_rabbit
+  #   container_name: scooters_consumer
+  #   ports:
+  #     - 7000:7000
+  #   environment:
+  #     - ConnectionString__DefaultConnection=User ID=postgres;Password=postgrespw;Server=scooters_db;Port=5432;Database=scooters_db;
+  #     - RABBITMQ_HOST=scooters_rabbit
+  #     - RABBITMQ_PORT=5672
+  #     - RABBITMQ_USER=guest
+  #     - RABBITMQ_PASSWORD=guest
+  #     - RABBITMQ_QUEUE=scooters_queue
+  #   networks:
+  #     - scooters_network
       
-  scooters_rabbit:
-    image: rabbitmq:3.13-management
-    depends_on:
-      - scooters_db
-      - scooters_migration
-    ports:
-        - "5672:5672"
-        - "15672:15672"
-    container_name: scooters_rabbit
-    networks:
-      - scooters_network
+  # scooters_rabbit:
+  #   image: rabbitmq:3.13-management
+  #   depends_on:
+  #     - scooters_db
+  #     - scooters_migration
+  #   ports:
+  #       - "5672:5672"
+  #       - "15672:15672"
+  #   container_name: scooters_rabbit
+  #   networks:
+  #     - scooters_network
+      
+  # scooters_db:
+  #   image: postgres:latest
+  #   container_name: scooters_db
+  #   environment:
+  #       - POSTGRES_USER=postgres
+  #       - POSTGRES_PASSWORD=postgrespw
+  #       - POSTGRES_DB=scooters_db
+  #   ports:
+  #       - 5433:5432
+  #   restart: always
+  #   volumes:
+  #       - data:/var/lib/postgresql/data
+  #   networks:
+  #     - scooters_network
 
-  scooters_db:
+  deliveries_db:
     image: postgres:latest
-    container_name: scooters_db
+    container_name: deliveries_db
     environment:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgrespw
-        - POSTGRES_DB=scooters_db
+        - POSTGRES_DB=deliveries_db
     ports:
-        - 5433:5432
+      - "5434:5432"
     restart: always
     volumes:
         - data:/var/lib/postgresql/data
     networks:
-      - scooters_network
+      - deliveries_network
  
 volumes:
   data:    
   
 networks:
   scooters_network:
+    driver: bridge
+  deliveries_network:
     driver: bridge
