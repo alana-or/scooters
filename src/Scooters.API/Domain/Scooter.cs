@@ -1,31 +1,33 @@
 ﻿using Scooters.Api.Services;
-using Newtonsoft.Json;
 
 namespace Scooters.Api.Domain;
 
 public class Scooter
 {
-    public int Id { get; set; }
+    private readonly IEventPublisher _eventPublisher;
 
-    public int Year { get; set; }
+    public int Id { get; private set; }
 
-    public string Model { get; set; }
+    public int Year { get; private set; }
 
-    public string LicencePlate { get; set; }
+    public string Model { get; private set; }
+
+    public string LicencePlate { get; private set; }
+
+    public Scooter(int year, string model, string licencePlate, IEventPublisher eventPublisher)
+    {
+        Id = 0;
+        Year = year;
+        Model = model;
+        LicencePlate = licencePlate;
+        _eventPublisher = eventPublisher;
+    }
 
     public void Publish()
     {
         if(Year == 2024)
         {
-            var publisher = new ScooterPublisher(hostname: "scooters_rabbit",
-                queueName: "scooters_queue",
-                username: "guest",
-                password: "guest",
-                port: 5672);
-
-            string message = JsonConvert.SerializeObject(this);
-            publisher.PublishMessage(message);
-            publisher.Dispose();
+            _eventPublisher.Publish(this); 
         }
     }
 }

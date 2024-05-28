@@ -16,11 +16,11 @@ class Program
                 options.UseNpgsql("Host=scooters_db;Port=5432;Username=postgres;Password=postgrespw;Database=scooters_db;Search Path=public"))
             .BuildServiceProvider();
 
-        using (var context = serviceProvider.GetRequiredService<ScootersContext>())
+        using (var _context = serviceProvider.GetRequiredService<ScootersContext>())
         {
             try
             {
-                context.Database.Migrate();
+                _context.Database.Migrate();
                 Console.WriteLine("Database migration completed.");
             }
             catch (Exception ex)

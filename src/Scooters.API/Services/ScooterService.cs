@@ -47,12 +47,17 @@ public class ScooterService : IScootersService
                 return Response<ScooterDB>.CreateFailure("Os dados da requisição estão incorretos");
             }
 
+            var rabbitMqConfig = new RabbitMqConfig();
+
+            IEventPublisher eventPublisher = new ScooterPublisher(rabbitMqConfig);
+
             var scooter = new Scooter
-            {
-                Year = request.Year,
-                Model = request.Model,
-                LicencePlate = request.LicencePlate
-            };
+            (
+                request.Year,
+                request.Model,
+                request.LicencePlate,
+                eventPublisher
+            );
 
             var scooterDB = _mapper.Map<ScooterDB>(scooter);
 

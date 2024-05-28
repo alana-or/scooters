@@ -68,8 +68,6 @@ public class ScootersRepository : IScootersRepository
         try
         {
             return await context.ScootersLog2024
-               .OrderByDescending(x => x.Id) 
-               .Take(5)
                .ToListAsync();
         }
         catch (Exception ex)

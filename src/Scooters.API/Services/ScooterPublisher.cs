@@ -1,65 +1,47 @@
-﻿using RabbitMQ.Client;
+﻿using Newtonsoft.Json;
+using RabbitMQ.Client;
+using Serilog;
 using System.Text;
 
 namespace Scooters.Api.Services;
 
-public class ScooterPublisher : IDisposable
+public class ScooterPublisher : IEventPublisher
 {
-    private readonly string _hostname;
-    private readonly string _queueName;
-    private readonly string _username;
-    private readonly string _password;
-    private readonly int _port;
-    private IConnection _connection;
-    private IModel _channel;
+    private readonly RabbitMqConfig _config;
+    private readonly Serilog.ILogger _logger;
 
-    public ScooterPublisher(string hostname, string queueName, string username, string password, int port)
+    public ScooterPublisher(RabbitMqConfig config)
     {
-        _hostname = hostname;
-        _queueName = queueName;
-        _username = username;
-        _password = password;
-        _port = port;
-
-        InitializeRabbitMQPublisher();
+        _logger = Log.ForContext<ScooterPublisher>();
+        _config = config;
     }
 
-    private void InitializeRabbitMQPublisher()
+    public void Publish<T>(T eventMessage) where T : class
     {
         var factory = new ConnectionFactory
         {
-            HostName = _hostname,
-            UserName = _username,
-            Password = _password,
-            Port = _port
+            HostName = _config.HostName,
+            UserName = _config.Username,
+            Password = _config.Password,
+            Port = _config.Port
         };
 
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
-        _channel.QueueDeclare(queue: _queueName,
+        var connection = factory.CreateConnection();
+        var channel = connection.CreateModel();
+        channel.QueueDeclare(queue: _config.QueueName,
                              durable: true,
                              exclusive: false,
                              autoDelete: false,
                              arguments: null);
-    }
 
-    public void PublishMessage(string message)
-    {
+        var message = JsonConvert.SerializeObject(eventMessage);
         var body = Encoding.UTF8.GetBytes(message);
 
-        _channel.BasicPublish(exchange: "",
-                             routingKey: _queueName,
+        channel.BasicPublish(exchange: "",
+                             routingKey: _config.QueueName,
                              basicProperties: null,
                              body: body);
-
-        Console.WriteLine($" [x] Sent {message}");
-    }
-
-    public void Dispose()
-    {
-        _channel?.Close();
-        _channel?.Dispose();
-        _connection?.Close();
-        _connection?.Dispose();
+        
+        _logger.Information($"Send message {message}");
     }
 }
