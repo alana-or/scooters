@@ -13,7 +13,7 @@ public class DeliveriesContext : DbContext
     }
 
     public DbSet<DeliveryPersonDb> DeliveryPeople { get; set; }
-    public DbSet<DeliveriesRentalDb> DeliveriesRental { get; set; }
+    public DbSet<DeliveryPersonRentalDb> DeliveryPersonRentals { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -34,7 +34,7 @@ public class DeliveriesContext : DbContext
             entity.Property(m => m.Photo).IsRequired();
         });
 
-        modelBuilder.Entity<DeliveriesRentalDb>(entity =>
+        modelBuilder.Entity<DeliveryPersonRentalDb>(entity =>
         {
             entity.HasKey(m => m.Id);
         });

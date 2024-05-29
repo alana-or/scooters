@@ -10,10 +10,36 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
 {
     private readonly IDeliveriesService _service = service;
 
-    [HttpGet("delivery_people")]
-    public async Task<IActionResult> Get()
+    [HttpGet("rentals/create")]
+    public async Task<IActionResult> CreateRental([FromBody] Rental rental)
     {
-        var response = await _service.GetAsync();
+        var response = await _service.CreateRentalAsync(rental);
+
+        if (response.Success)
+        {
+            return Ok(response.Data);
+        }
+
+        return BadRequest(response.Message);
+    }
+
+    [HttpGet("rentals")]
+    public async Task<IActionResult> GetRentals([FromBody] Guid personId)
+    {
+        var response = await _service.GetRentalsAsync(personId);
+
+        if (response.Success)
+        {
+            return Ok(response.Data);
+        }
+
+        return BadRequest(response.Message);
+    }
+
+    [HttpGet("scooters")]
+    public async Task<IActionResult> GetScooters()
+    {
+        var response = await _service.GetScootersAsync();
 
         if (response.Success)
         {
