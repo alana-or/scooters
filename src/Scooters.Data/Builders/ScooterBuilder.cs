@@ -11,7 +11,7 @@ public class ScooterBuilder
     {
         scooter = new AutoFaker<ScooterDB>()
             .RuleFor(m => m.Year, f => f.Random.Int(1960, 2030))
-            .RuleFor(m => m.Id, 0)
+            .RuleFor(m => m.Id, f => f.Random.Int(1, 200))
             .RuleFor(m => m.LicencePlate, f => f.Random.String2(1, 20))
             .RuleFor(m => m.Model, f => f.Random.String2(1, 100))
             .Generate();
@@ -21,7 +21,7 @@ public class ScooterBuilder
     {
         return new AutoFaker<ScooterDB>()
             .RuleFor(m => m.Year, f => f.Random.Int(1960, 2030))
-            .RuleFor(m => m.Id, 0)
+            .RuleFor(m => m.Id, f => f.Random.Int(1, 200))
             .RuleFor(m => m.LicencePlate, f => f.Random.String2(1, 20))
             .RuleFor(m => m.Model, f => f.Random.String2(1, 100))
             .Generate(quant);

@@ -37,6 +37,10 @@ public class DeliveriesContext : DbContext
         modelBuilder.Entity<DeliveryPersonRentalDb>(entity =>
         {
             entity.HasKey(m => m.Id);
+            entity.Property(m => m.Year).IsRequired().HasMaxLength(4);
+            entity.Property(m => m.scooterId).IsRequired();
+            entity.Property(m => m.LicencePlate).IsRequired();
+            entity.Property(m => m.Model).IsRequired();
         });
     }
 }

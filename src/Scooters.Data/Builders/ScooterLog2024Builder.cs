@@ -10,7 +10,7 @@ public class ScooterLog2024Builder
     public ScooterLog2024Builder()
     {
         scooterLog = new AutoFaker<ScooterLog2024>()
-            .RuleFor(m => m.Id, 0)
+            .RuleFor(m => m.Id, new Guid())
             .RuleFor(m => m.Message, f => f.Random.String2(1, 100))
             .Generate();
     }
@@ -18,7 +18,7 @@ public class ScooterLog2024Builder
     public List<ScooterLog2024> Generate(int quant)
     {
         return new AutoFaker<ScooterLog2024>()
-            .RuleFor(m => m.Id, 0)
+            .RuleFor(m => m.Id, new Guid())
             .RuleFor(m => m.Message, f => f.Random.String2(1, 100))
             .Generate(quant);
     }

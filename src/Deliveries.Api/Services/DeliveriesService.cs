@@ -9,33 +9,35 @@ namespace Deliveries.Api.Services;
 
 public interface IDeliveriesService
 {
-    public Task<Response<DeliveryPersonResponse>> CreateAsync(DeliveryPersonCreate request);
-    public Task<Response<DeliveryPersonResponse>> UpdateAsync(DeliveryPersonUpdate request);
+    public Task<Response<DeliveryPersonResponse>> CreatePersonAsync(DeliveryPersonCreate request);
+    public Task<Response<DeliveryPersonResponse>> UpdatePersonAsync(DeliveryPersonUpdate request);
     public Task<Response<IEnumerable<Rental>>> GetRentalsAsync(Guid request);
     public Task<Response<Rental>> CreateRentalAsync(Rental request);
     public Task<Response<IEnumerable<Scooter>>> GetScootersAsync();
+    //public Task<Response<IEnumerable<DeliveryPersonRentals>>> GetDeliveryPersonRentalsAsync(Guid request);
 }
 
 public class DeliveriesService : IDeliveriesService
 {
-    private readonly IDeliveriesRepository _deliveryPersons;
+    private readonly IDeliveryPersonRepository _deliveryPeople;
+    private readonly IDeliveryPersonRentalsRepository _deliveryPersonRentals;
     private readonly Serilog.ILogger _logger;
     private readonly IValidator<DeliveryPersonCreate> _validatorCreate;
     private readonly IValidator<DeliveryPersonUpdate> _validatorUpdate;
     private readonly IMapper _mapper;
 
-    public DeliveriesService(IDeliveriesRepository deliveryPersons,
+    public DeliveriesService(IDeliveryPersonRepository deliveryPersons,
         IValidator<DeliveryPersonCreate> validatorCreate, 
         IValidator<DeliveryPersonUpdate> validatorUpdate,
         IMapper mapper)
     {
         _validatorCreate = validatorCreate;
         _validatorUpdate = validatorUpdate;
-        _deliveryPersons = deliveryPersons;
+        _deliveryPeople = deliveryPersons;
         _mapper = mapper;
     }
 
-    public async Task<Response<DeliveryPersonResponse>> CreateAsync(DeliveryPersonCreate request)
+    public async Task<Response<DeliveryPersonResponse>> CreatePersonAsync(DeliveryPersonCreate request)
     {
         try
         {
@@ -55,7 +57,7 @@ public class DeliveriesService : IDeliveriesService
 
             var deliveryPersonDB = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
 
-            await _deliveryPersons.CreateAsync(deliveryPersonDB);
+            await _deliveryPeople.CreateAsync(deliveryPersonDB);
 
             var deliveryPersonResponse = _mapper.Map<DeliveryPersonResponse>(deliveryPersonDB);
 
@@ -69,7 +71,7 @@ public class DeliveriesService : IDeliveriesService
         }
     }
 
-    public async Task<Response<DeliveryPersonResponse>> UpdateAsync(DeliveryPersonUpdate request)
+    public async Task<Response<DeliveryPersonResponse>> UpdatePersonAsync(DeliveryPersonUpdate request)
     {
         try
         {
@@ -89,7 +91,7 @@ public class DeliveriesService : IDeliveriesService
 
             var deliveryPersonDB = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
 
-            await _deliveryPersons.UpdateAsync(deliveryPersonDB);
+            await _deliveryPeople.UpdateAsync(deliveryPersonDB);
 
             var deliveryPersonResponse = _mapper.Map<DeliveryPersonResponse>(deliveryPersonDB);
 
@@ -117,21 +119,21 @@ public class DeliveriesService : IDeliveriesService
         }
     }
 
-    public async Task<Response<IEnumerable<Rental>>> GetRentalsAsync(Guid request)
-    {
-        try
-        {
-            var response = await _deliveryPersons.GetRentals(request);
-            var rentals = _mapper.Map<IEnumerable<Rental>>(response);
+    //public async Task<Response<IEnumerable<DeliveryPersonRentals>>> GetDeliveryPersonRentalsAsync(Guid request)
+    //{
+    //    try
+    //    {
+    //        var response = await _deliveryPersonRentals.get(request);
+    //        var rentals = _mapper.Map<IEnumerable<Rental>>(response);
 
-            return Response<IEnumerable<Rental>>.CreateSuccess(rentals);
-        }
-        catch (Exception ex)
-        {
-            _logger.Error(ex, "An error occurred while getting rentals.");
-            return Response<IEnumerable<Rental>>.CreateFailure(ex.Message);
-        }
-    }
+    //        return Response<IEnumerable<Rental>>.CreateSuccess(rentals);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.Error(ex, "An error occurred while getting rentals.");
+    //        return Response<IEnumerable<Rental>>.CreateFailure(ex.Message);
+    //    }
+    //}
 
     public async Task<Response<Rental>> CreateRentalAsync(Rental request)
     {
@@ -156,7 +158,7 @@ public class DeliveriesService : IDeliveriesService
 
             var deliveryRentalDb = _mapper.Map<DeliveryPersonRentalDb>(deliveryRental);
 
-            await _deliveryPersons.CreateDeliveryRentalAsync(deliveryRentalDb);
+            await _deliveryPersonRentals.CreateAsync(deliveryRentalDb);
 
             var deliveryRentalResponse = _mapper.Map<Rental>(deliveryRentalDb);
 
@@ -168,5 +170,10 @@ public class DeliveriesService : IDeliveriesService
             _logger.Error(ex, "An error occurred while getting deliveryPersons.");
             throw;
         }
+    }
+
+    public Task<Response<IEnumerable<Rental>>> GetRentalsAsync(Guid request)
+    {
+        throw new NotImplementedException();
     }
 }

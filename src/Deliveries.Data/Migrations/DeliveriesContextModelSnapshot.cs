@@ -22,18 +22,6 @@ namespace Deliveries.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Deliveries.Data.Entities.DeliveriesRentalDb", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("deliveries_rental");
-                });
-
             modelBuilder.Entity("Deliveries.Data.Entities.DeliveryPersonDb", b =>
                 {
                     b.Property<Guid>("Id")
@@ -56,6 +44,52 @@ namespace Deliveries.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("delivery_person");
+                });
+
+            modelBuilder.Entity("Deliveries.Data.Entities.DeliveryPersonRentalDb", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("DeliveryPersonId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("LicencePlate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("licence-plate");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("model");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer")
+                        .HasColumnName("year");
+
+                    b.Property<Guid>("scooterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("scooter-id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeliveryPersonId");
+
+                    b.ToTable("deliveries_rental");
+                });
+
+            modelBuilder.Entity("Deliveries.Data.Entities.DeliveryPersonRentalDb", b =>
+                {
+                    b.HasOne("Deliveries.Data.Entities.DeliveryPersonDb", "DeliveryPerson")
+                        .WithMany()
+                        .HasForeignKey("DeliveryPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DeliveryPerson");
                 });
 #pragma warning restore 612, 618
         }

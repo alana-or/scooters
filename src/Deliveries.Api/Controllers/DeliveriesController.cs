@@ -52,7 +52,7 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
     [HttpPost("Create")]
     public async Task<IActionResult> Create([FromBody] DeliveryPersonCreate deliveryPerson)
     {
-        var response = await _service.CreateAsync(deliveryPerson);
+        var response = await _service.CreatePersonAsync(deliveryPerson);
      
         if (response.Success)
         {
@@ -65,7 +65,7 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
     [HttpPut("Put")]
     public async Task<IActionResult> Put([FromBody] DeliveryPersonUpdate deliveryPerson)
     {
-        var response = await _service.UpdateAsync(deliveryPerson);
+        var response = await _service.UpdatePersonAsync(deliveryPerson);
 
         if (response.Success)
         {

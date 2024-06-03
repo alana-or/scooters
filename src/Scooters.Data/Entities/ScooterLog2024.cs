@@ -8,7 +8,7 @@ public class ScooterLog2024
 {
     [Key]
     [Column("id")]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     [MaxLength(1000)]
@@ -17,6 +17,7 @@ public class ScooterLog2024
 
     public ScooterLog2024(string message)
     {
+        Id = new Guid();
         Message = message;
     }
 }

@@ -20,7 +20,8 @@ public class Startup(IConfiguration configuration)
             options.UseNpgsql(
                 Configuration.GetConnectionString("DefaultConnection")).EnableDetailedErrors());
 
-        services.AddScoped<IDeliveriesRepository, DeliveriesRepository>();
+        services.AddScoped<IDeliveryPersonRentalsRepository, DeliveryPersonRentalsRepository>();
+        services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
