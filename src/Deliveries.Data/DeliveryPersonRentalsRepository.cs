@@ -36,8 +36,17 @@ public class DeliveryPersonRentalsRepository : IDeliveryPersonRentalsRepository
         }
     }
 
-    public Task UpdateAsync(DeliveryPersonRentalDb deliveryRentalDb)
+    public async Task UpdateAsync(DeliveryPersonRentalDb deliveryRental)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _context.DeliveryPersonRentals.Update(deliveryRental);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while updating delivery rental.");
+            throw;
+        }
     }
 }
