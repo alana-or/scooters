@@ -10,7 +10,7 @@ using Testcontainers.PostgreSql;
 namespace Scooters.Data.Tests;
 
 [TestFixture]
-public class ScootersTests
+public class ScootersRepositoryTests
 {
     private PostgreSqlContainer _postgresContainer;
     private ServiceProvider _serviceProvider;
@@ -70,7 +70,7 @@ public class ScootersTests
             var _scooters = _scope.ServiceProvider.GetRequiredService<IScootersRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<ScootersContext>();
 
-            var scooter = new ScooterDB { Id = 0, Year = 2023, Model = "Model", LicencePlate = "123" };
+            var scooter = new ScooterDB { Id = 10, Year = 2023, Model = "Model", LicencePlate = "123" };
 
             await _scooters.CreateAsync(scooter);
 
@@ -106,7 +106,7 @@ public class ScootersTests
             var _scooters = _scope.ServiceProvider.GetRequiredService<IScootersRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<ScootersContext>();
 
-            var scooter = new ScooterDB { Id = 0, Year = 2023, Model = "Old Model", LicencePlate = "OLD123" };
+            var scooter = new ScooterDB { Id = 10, Year = 2023, Model = "Old Model", LicencePlate = "OLD123" };
             _context.Scooters.Add(scooter);
             await _context.SaveChangesAsync();
 
@@ -169,7 +169,7 @@ public class ScootersTests
 
             var scooters = new ScooterBuilder().Generate(5);
 
-            var specificScooter = new ScooterDB { Year = 2023, Model = "Specific Model", LicencePlate = "ABC123" };
+            var specificScooter = new ScooterDB { Id = 12, Year = 2023, Model = "Specific Model", LicencePlate = "ABC123" };
             scooters.Add(specificScooter);
 
             _context.Scooters.AddRange(scooters);
