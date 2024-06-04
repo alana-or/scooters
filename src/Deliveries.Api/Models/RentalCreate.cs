@@ -1,7 +1,7 @@
 ﻿namespace Deliveries.Api.Models;
 
-public class Rental
+public class RentalCreate
 {
-    public Scooter Scooter { get; set; }
+    public ScooterResponse Scooter { get; set; }
     public DeliveryPersonResponse DeliveryPerson {  get; set; }
 }

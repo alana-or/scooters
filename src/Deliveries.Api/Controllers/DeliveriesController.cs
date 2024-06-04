@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Deliveries.Controllers;
 
-[Route("api/[controller]")]
+[Route("v1/api/[controller]")]
 [ApiController]
 public class DeliveriesController(IDeliveriesService service) : ControllerBase
 {
     private readonly IDeliveriesService _service = service;
 
-    [HttpGet("rentals/create")]
-    public async Task<IActionResult> CreateRental([FromBody] Rental rental)
+    [HttpPost("rentals/create")]
+    public async Task<IActionResult> CreateRental([FromBody] RentalCreate rental)
     {
         var response = await _service.CreateRentalAsync(rental);
 

@@ -4,11 +4,14 @@ using Deliveries.Data.Entities;
 
 namespace Deliveries.Api.Mappers;
 
-public class ScooterMapper : Profile
+public class DeliveriesMapper : Profile
 {
-    public ScooterMapper()
+    public DeliveriesMapper()
     {
         CreateMap<DeliveryPerson, DeliveryPersonDb>();
         CreateMap<DeliveryPersonDb, DeliveryPerson>();
+
+        CreateMap<DeliveryPersonRentalDb, DeliveryPersonRental>();
+        CreateMap<DeliveryPersonRental, DeliveryPersonRentalDb>();
     }
 }
