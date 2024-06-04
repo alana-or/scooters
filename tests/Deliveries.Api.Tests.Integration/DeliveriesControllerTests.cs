@@ -1,24 +1,22 @@
 using Deliveries.Api.Models;
 using FluentAssertions;
 using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 
 namespace Deliveries.Tests.Controllers;
 
-public class DeliveriesControllerTests : BaseTests
+public class DeliveriesControllerTests : TestsBase
 {
     [Test]
-    public async Task CreateRental_ShouldReturnOk()
+    public async Task CreateRentalAsync_ShouldReturnOk()
     {
-        var rental = new RentalCreate
+        var personId = DeliveryPersonRentals.First().DeliveryPerson.Id;
+
+        var rental = new DeliveryPersonRentalCreateModel
         {
-            DeliveryPerson = new DeliveryPersonResponse
-            {
-                Id = Guid.NewGuid(),
-                Name = "name",
-                Photo = "photo"
-            },
-            Scooter = new ScooterResponse
+            DeliveryPersonId = personId,
+            Scooter = new ScooterModel
             {
                 Id = Guid.NewGuid(),
                 LicencePlate = "LicencePlate",
@@ -29,17 +27,95 @@ public class DeliveriesControllerTests : BaseTests
 
         var content = new StringContent(JsonConvert.SerializeObject(rental), Encoding.UTF8, "application/json");
 
-        var response = await Client.PostAsync("v1/api/deliveries/rentals/create", content);
+        var response = await Client.PostAsync("deliveries/rentals/create", content);
 
         response.EnsureSuccessStatusCode();
         var responseString = await response.Content.ReadAsStringAsync();
-        var responseObject = JsonConvert.DeserializeObject<RentalResponse>(responseString);
+        var responseObject = JsonConvert.DeserializeObject<RentalModel>(responseString);
 
         responseObject.Should().BeEquivalentTo(
             rental,
             cfg => cfg
                 .Excluding(a => a.Scooter.Id)
-                .Excluding(a => a.DeliveryPerson.Id)
+                .Excluding(a => a.DeliveryPersonId)
         );
+    }
+
+    [Test]
+    public async Task CreateRentalAsync_WithInvalidData_ShouldReturnBadRequest()
+    {
+        var rental = new DeliveryPersonRentalCreateModel
+        {
+            DeliveryPersonId = Guid.Empty, 
+            Scooter = new ScooterModel
+            {
+                Id = Guid.NewGuid(),
+                LicencePlate = "LicencePlate",
+                Model = "Model",
+                Year = 2024
+            }
+        };
+
+        var content = new StringContent(JsonConvert.SerializeObject(rental), Encoding.UTF8, "application/json");
+
+        var response = await Client.PostAsync("deliveries/rentals/create", content);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Test]
+    public async Task GetPersonRentalsAsync_ShouldReturnOk()
+    {
+        var personId = DeliveryPersonRentals.First().DeliveryPerson.Id;
+
+        var response = await Client.GetAsync($"deliveries/rentals/{personId}");
+
+        response.EnsureSuccessStatusCode();
+        var responseString = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<IEnumerable<RentalModel>>(responseString);
+        responseObject.Should().HaveCount(5);
+    }
+
+    [Test]
+    public async Task CreatePersonAsync_ShouldReturnOk()
+    {
+        var person = new DeliveryPersonCreateModel
+        {
+            Name = "name",
+            Photo = "photo"
+        };
+
+        var content = new StringContent(JsonConvert.SerializeObject(person), Encoding.UTF8, "application/json");
+
+        var response = await Client.PostAsync($"deliveries/person/create", content);
+
+        response.EnsureSuccessStatusCode();
+        var responseString = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<DeliveryPersonModel>(responseString);
+
+        responseObject.Should().BeEquivalentTo(person);
+    }
+
+    [Test]
+    public async Task UpdatePersonAsync_ShouldReturnOk()
+    {
+        var personId = DeliveryPersonRentals.First().DeliveryPerson.Id;
+
+        var person = new DeliveryPersonUpdateModel
+        {
+            Id = personId,
+            Name = "new name",
+            Photo = "new photo"
+        };
+
+        var content = new StringContent(JsonConvert.SerializeObject(person), Encoding.UTF8, "application/json");
+
+        var response = await Client.PutAsync($"deliveries/person/update", content);
+
+        response.EnsureSuccessStatusCode();
+        var responseString = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<DeliveryPersonModel>(responseString);
+
+        responseObject.Should().BeEquivalentTo(person);
     }
 }

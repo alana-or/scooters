@@ -74,7 +74,7 @@ public class DeliveryPersonRentalRepositoryTests
                 LicencePlate = "LicencePlate",
                 Model = "Model",
                 Year = 2023,
-                scooterId = new Guid(),
+                ScooterId = new Guid(),
             };
 
             await _deliveries.CreateAsync(delivery);
@@ -120,7 +120,7 @@ public class DeliveryPersonRentalRepositoryTests
                 LicencePlate = "LicencePlate",
                 Model = "Model",
                 Year = 2023,
-                scooterId = new Guid(),
+                ScooterId = new Guid(),
             };
 
             _context.DeliveryPersonRentals.Add(delivery);

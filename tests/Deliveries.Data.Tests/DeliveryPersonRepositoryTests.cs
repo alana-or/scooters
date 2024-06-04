@@ -14,7 +14,7 @@ public class DeliveryPersonRepositoryTests
 {
     private PostgreSqlContainer _postgresContainer;
     private ServiceProvider _serviceProvider;
-    private Mock<ILogger<DeliveryPersonRepository>> _loggerMock;
+    private Mock<ILogger<DeliveryPeopleRepository>> _loggerMock;
 
     [OneTimeSetUp]
     public async Task OneTimeSetup()
@@ -26,7 +26,7 @@ public class DeliveryPersonRepositoryTests
             .WithCleanUp(true)
             .Build();
 
-        _loggerMock = new Mock<ILogger<DeliveryPersonRepository>>();
+        _loggerMock = new Mock<ILogger<DeliveryPeopleRepository>>();
         _loggerMock.SetupAllProperties();
 
         await _postgresContainer.StartAsync();
@@ -42,7 +42,7 @@ public class DeliveryPersonRepositoryTests
 
         services.AddDbContext<DeliveriesContext>(options =>
             options.UseNpgsql(_postgresContainer.GetConnectionString()));
-        services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
+        services.AddScoped<IDeliveryPersonRepository, DeliveryPeopleRepository>();
 
         _serviceProvider = services.BuildServiceProvider();
 
