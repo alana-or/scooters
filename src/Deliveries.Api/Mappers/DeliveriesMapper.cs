@@ -9,27 +9,24 @@ public class DeliveriesMapper : Profile
 {
     public DeliveriesMapper()
     {
-        CreateMap<DeliveryPerson, DeliveryPersonDb>();
-        CreateMap<DeliveryPersonDb, DeliveryPerson>();
+        CreateMap<DeliveryPerson, DeliveryPersonDb>()
+            .ReverseMap();
 
-        CreateMap<DeliveryPersonRentalDb, DeliveryPersonRental>();
-        CreateMap<DeliveryPersonRental, DeliveryPersonRentalDb>();
+        CreateMap<DeliveryPersonRentalDb, DeliveryPersonRental>()
+            .ReverseMap();
 
-        CreateMap<DeliveryPersonResponse, DeliveryPersonDb>();
-        CreateMap<ScooterResponse, DeliveryPersonDb>();
+        CreateMap<DeliveryPersonResponse, DeliveryPersonDb>()
+            .ReverseMap();
 
-        CreateMap<DeliveryPersonRentalDb, RentalResponse>()
-            .ForPath(x => x.DeliveryPerson, opt => opt.MapFrom(s => s.DeliveryPerson))
-            .ForPath(x => x.Scooter.Id, opt => opt.MapFrom(s => s.scooterId))
-            .ForPath(x => x.Scooter.Year, opt => opt.MapFrom(s => s.Year))
-            .ForPath(x => x.Scooter.Model, opt => opt.MapFrom(s => s.Model))
-            .ForPath(x => x.Scooter.LicencePlate, opt => opt.MapFrom(s => s.LicencePlate));
+        CreateMap<ScooterResponse, DeliveryPersonDb>()
+            .ReverseMap();
 
         CreateMap<RentalResponse, DeliveryPersonRentalDb>()
             .ForPath(x => x.DeliveryPerson, opt => opt.MapFrom(s => s.DeliveryPerson))
             .ForPath(x => x.scooterId, opt => opt.MapFrom(s => s.Scooter.Id))
             .ForPath(x => x.Year, opt => opt.MapFrom(s => s.Scooter.Year))
             .ForPath(x => x.Model, opt => opt.MapFrom(s => s.Scooter.Model))
-            .ForPath(x => x.LicencePlate, opt => opt.MapFrom(s => s.Scooter.LicencePlate));
+            .ForPath(x => x.LicencePlate, opt => opt.MapFrom(s => s.Scooter.LicencePlate))
+            .ReverseMap();
     }
 }

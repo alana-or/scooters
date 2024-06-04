@@ -7,12 +7,14 @@ using Deliveries.Api;
 using Deliveries.Api.Models;
 using Deliveries.Api.Services;
 using Deliveries.Data;
+using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting.Internal;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Deliveries.Tests.Controllers;
@@ -57,7 +59,6 @@ public class DeliveriesControllerTests : IDisposable
     [Test]
     public async Task CreateRental_ShouldReturnOk()
     {
-        // Arrange
         var rental = new RentalCreate
         {
             DeliveryPerson = new DeliveryPersonResponse
@@ -75,21 +76,24 @@ public class DeliveriesControllerTests : IDisposable
             }
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(rental), Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(rental), Encoding.UTF8, "application/json");
 
-        // Act
         var response = await _client.PostAsync("v1/api/deliveries/rentals/create", content);
 
-        // Assert
         response.EnsureSuccessStatusCode();
         var responseString = await response.Content.ReadAsStringAsync();
-        var responseObject = JsonSerializer.Deserialize<Response<string>>(responseString);
-        Assert.IsTrue(responseObject.Success);
+        var responseObject = JsonConvert.DeserializeObject<RentalResponse>(responseString);
+
+        responseObject.Should().BeEquivalentTo(
+            rental,
+            cfg => cfg
+                .Excluding(a => a.Scooter.Id)
+                .Excluding(a => a.DeliveryPerson.Id)
+        );
     }
 
     public void Dispose()
     {
-        _containerFixture.DisposeAsync().Wait();
         _client?.Dispose();
     }
 }
