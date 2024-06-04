@@ -1,6 +1,6 @@
 ﻿namespace Deliveries.Api.Models;
 
-public class Scooter
+public class ScooterResponse
 {
     public Guid Id { get; set; }
 

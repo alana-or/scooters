@@ -5,6 +5,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace Deliveries.Api;
 
@@ -15,10 +16,26 @@ public class Startup(IConfiguration configuration)
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddScoped<DbContext, DeliveriesContext>();
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-        services.AddDbContext<DeliveriesContext>(options =>
-            options.UseNpgsql(
-                Configuration.GetConnectionString("DefaultConnection")).EnableDetailedErrors());
+        if (environment == Environments.Development)
+        {
+            services.AddDbContext<DeliveriesContext>(options =>
+                options.UseNpgsql(
+                    Configuration.GetConnectionString("DevelopmentConnection")).EnableDetailedErrors());
+        }
+        else if (environment == Environments.Production)
+        {
+            services.AddDbContext<DeliveriesContext>(options =>
+                options.UseNpgsql(
+                    Configuration.GetConnectionString("ProductionConnection")));
+        }
+        else
+        {
+            services.AddDbContext<DeliveriesContext>(options =>
+                options.UseNpgsql(
+                    Configuration.GetConnectionString("DefaultConnection")));
+        }
 
         services.AddScoped<IDeliveryPersonRentalsRepository, DeliveryPersonRentalsRepository>();
         services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();

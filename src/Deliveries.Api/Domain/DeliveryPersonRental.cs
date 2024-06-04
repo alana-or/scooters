@@ -1,6 +1,6 @@
 ﻿namespace Deliveries.Api.Domain;
 
-public class DeliveryPersonRentals
+public class DeliveryPersonRental
 {
     public Guid Id { get; set; }
     public Guid ScooterId { get; set; }
@@ -8,7 +8,7 @@ public class DeliveryPersonRentals
     public string Model { get; set; }
     public string LicencePlate { get; set; }
     public DeliveryPerson DeliveryPerson {  get; set; }
-    public DeliveryPersonRentals(Guid scooterId, int year, string model, string licencePlate, DeliveryPerson deliveryPerson)
+    public DeliveryPersonRental(Guid scooterId, int year, string model, string licencePlate, DeliveryPerson deliveryPerson)
     {
         Id = new Guid();
         ScooterId = scooterId;

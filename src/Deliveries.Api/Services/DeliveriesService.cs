@@ -11,9 +11,9 @@ public interface IDeliveriesService
 {
     public Task<Response<DeliveryPersonResponse>> CreatePersonAsync(DeliveryPersonCreate request);
     public Task<Response<DeliveryPersonResponse>> UpdatePersonAsync(DeliveryPersonUpdate request);
-    public Task<Response<IEnumerable<Rental>>> GetRentalsAsync(Guid request);
-    public Task<Response<Rental>> CreateRentalAsync(Rental request);
-    public Task<Response<IEnumerable<Scooter>>> GetScootersAsync();
+    public Task<Response<IEnumerable<RentalResponse>>> GetRentalsAsync(Guid request);
+    public Task<Response<RentalResponse>> CreateRentalAsync(RentalCreate request);
+    public Task<Response<IEnumerable<ScooterResponse>>> GetScootersAsync();
     //public Task<Response<IEnumerable<DeliveryPersonRentals>>> GetDeliveryPersonRentalsAsync(Guid request);
 }
 
@@ -21,19 +21,23 @@ public class DeliveriesService : IDeliveriesService
 {
     private readonly IDeliveryPersonRepository _deliveryPeople;
     private readonly IDeliveryPersonRentalsRepository _deliveryPersonRentals;
-    private readonly Serilog.ILogger _logger;
+    private readonly ILogger<DeliveriesService> _logger;
     private readonly IValidator<DeliveryPersonCreate> _validatorCreate;
     private readonly IValidator<DeliveryPersonUpdate> _validatorUpdate;
     private readonly IMapper _mapper;
 
-    public DeliveriesService(IDeliveryPersonRepository deliveryPersons,
+    public DeliveriesService(IDeliveryPersonRepository deliveryPeople,
+        IDeliveryPersonRentalsRepository deliveryPersonRentals,
         IValidator<DeliveryPersonCreate> validatorCreate, 
         IValidator<DeliveryPersonUpdate> validatorUpdate,
+        ILogger<DeliveriesService> logger,
         IMapper mapper)
     {
         _validatorCreate = validatorCreate;
         _validatorUpdate = validatorUpdate;
-        _deliveryPeople = deliveryPersons;
+        _deliveryPeople = deliveryPeople;
+        _deliveryPersonRentals = deliveryPersonRentals;
+        _logger = logger;
         _mapper = mapper;
     }
 
@@ -66,7 +70,7 @@ public class DeliveriesService : IDeliveriesService
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "An error occurred while getting deliveryPersons.");
+            _logger.LogError(ex, "An error occurred while getting deliveryPersons.");
             throw;
         }
     }
@@ -100,22 +104,22 @@ public class DeliveriesService : IDeliveriesService
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "An error occurred while getting deliveryPersons.");
+            _logger.LogError(ex, "An error occurred while getting deliveryPersons.");
             throw;
         }
     }
 
-    public async Task<Response<IEnumerable<Scooter>>> GetScootersAsync()
+    public async Task<Response<IEnumerable<ScooterResponse>>> GetScootersAsync()
     {
         try
         {
-            var response = new List<Scooter>();
-            return Response<IEnumerable<Scooter>>.CreateSuccess(response);
+            var response = new List<ScooterResponse>();
+            return Response<IEnumerable<ScooterResponse>>.CreateSuccess(response);
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "An error occurred while getting scooters.");
-            return Response<IEnumerable<Scooter>>.CreateFailure(ex.Message);
+            _logger.LogError(ex, "An error occurred while getting scooters.");
+            return Response<IEnumerable<ScooterResponse>>.CreateFailure(ex.Message);
         }
     }
 
@@ -135,7 +139,7 @@ public class DeliveriesService : IDeliveriesService
     //    }
     //}
 
-    public async Task<Response<Rental>> CreateRentalAsync(Rental request)
+    public async Task<Response<RentalResponse>> CreateRentalAsync(RentalCreate request)
     {
         try
         {
@@ -146,7 +150,7 @@ public class DeliveriesService : IDeliveriesService
             //    return Response<DeliveryPerson>.CreateFailure("Os dados da requisição estão incorretos");
             //}
 
-            var deliveryRental = new DeliveryPersonRentals
+            var deliveryRental = new DeliveryPersonRental
             (
                 request.Scooter.Id,
                 request.Scooter.Year,
@@ -160,19 +164,19 @@ public class DeliveriesService : IDeliveriesService
 
             await _deliveryPersonRentals.CreateAsync(deliveryRentalDb);
 
-            var deliveryRentalResponse = _mapper.Map<Rental>(deliveryRentalDb);
+            var deliveryRentalResponse = _mapper.Map<RentalResponse>(deliveryRentalDb);
 
-            return Response<Rental>.CreateSuccess(deliveryRentalResponse);
+            return Response<RentalResponse>.CreateSuccess(deliveryRentalResponse);
 
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "An error occurred while getting deliveryPersons.");
+            _logger.LogError(ex, "An error occurred while getting deliveryPersons.");
             throw;
         }
     }
 
-    public Task<Response<IEnumerable<Rental>>> GetRentalsAsync(Guid request)
+    public Task<Response<IEnumerable<RentalResponse>>> GetRentalsAsync(Guid request)
     {
         throw new NotImplementedException();
     }

@@ -2,7 +2,9 @@
 
 public class DeliveryPersonResponse
 {
-    public string Name { get; private set; }
+    public Guid Id { get; set; }
 
-    public string Photo { get; private set; }
+    public string Name { get; set; }
+
+    public string Photo { get; set; }
 }
