@@ -1,17 +1,22 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Deliveries.Api;
+using Deliveries.Api.Services;
+using Deliveries.Data;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
 [SetUpFixture]
-public class PostgreSqlTestcontainerFixture
+public class ApiFixture
 {
-    public PostgreSqlContainer Testcontainer { get; private set; }
-    public string ConnectionString { get; private set; }
+    private PostgreSqlContainer _testcontainer;
+    private readonly WebApplicationFactory<Startup> _factory = new WebApplicationFactory<Startup>();
+    public static HttpClient HttpClient { get; private set; }
 
     [OneTimeSetUp]
-    public async Task InitializeAsync()
+    public async Task OneTimeSetUp()
     {
-        // Set up PostgreSQL container
-        Testcontainer = new PostgreSqlBuilder()
+        _testcontainer = new PostgreSqlBuilder()
             .WithDatabase("deliveries_db")
             .WithUsername("postgres")
             .WithPassword("postgrespw")
@@ -19,15 +24,36 @@ public class PostgreSqlTestcontainerFixture
             .WithCleanUp(true)
             .Build();
 
-        await Testcontainer.StartAsync();
-        ConnectionString = Testcontainer.GetConnectionString();
+        await _testcontainer.StartAsync();
+
+        HttpClient = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureServices((context, services) =>
+            {
+                services.AddScoped<DbContext, DeliveriesContext>();
+
+                services.AddDbContext<DeliveriesContext>(options =>
+                    options.UseNpgsql(_testcontainer.GetConnectionString()).EnableDetailedErrors());
+
+                services.AddScoped<IDeliveryPersonRentalsRepository, DeliveryPersonRentalsRepository>();
+                services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
+                services.AddScoped<IDeliveriesService, DeliveriesService>();
+
+            });
+        }).CreateClient();
+
+        using var scope = _factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<DeliveriesContext>();
+        dbContext.Database.Migrate();
     }
 
     [OneTimeTearDown]
-    public async Task DisposeAsync()
+    public async Task OneTimeTearDown()
     {
-        await Testcontainer.StopAsync();
-        await Testcontainer.DisposeAsync();
+        HttpClient?.Dispose();
+        _factory.Dispose();
+        await _testcontainer.StopAsync();
+        await _testcontainer.DisposeAsync();
     }
 }
 
