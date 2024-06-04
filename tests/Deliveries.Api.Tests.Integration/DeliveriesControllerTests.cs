@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting.Internal;
 using NUnit.Framework;
 
 namespace Deliveries.Tests.Controllers;
@@ -26,7 +28,6 @@ public class DeliveriesControllerTests : IDisposable
     {
         _factory = new WebApplicationFactory<Startup>();
         _containerFixture = new PostgreSqlTestcontainerFixture();
-        _containerFixture.InitializeAsync().Wait();
     }
 
     [SetUp]
@@ -34,11 +35,18 @@ public class DeliveriesControllerTests : IDisposable
     {
         _client = _factory.WithWebHostBuilder(builder =>
         {
-            builder.UseEnvironment("Tests");
-            builder.ConfigureAppConfiguration((context, config) =>
-            {
-                config.AddJsonFile("appsettings.Tests.json");
-            });
+            builder.ConfigureServices((context, services) =>
+             {
+                 services.AddScoped<DbContext, DeliveriesContext>();
+
+                 services.AddDbContext<DeliveriesContext>(options =>
+                     options.UseNpgsql(_containerFixture.ConnectionString).EnableDetailedErrors());
+
+                 services.AddScoped<IDeliveryPersonRentalsRepository, DeliveryPersonRentalsRepository>();
+                 services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
+                 services.AddScoped<IDeliveriesService, DeliveriesService>();
+
+             });
         }).CreateClient();
 
         using var scope = _factory.Services.CreateScope();
@@ -70,7 +78,7 @@ public class DeliveriesControllerTests : IDisposable
         var content = new StringContent(JsonSerializer.Serialize(rental), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync("/api/deliveries/rentals/create", content);
+        var response = await _client.PostAsync("v1/api/deliveries/rentals/create", content);
 
         // Assert
         response.EnsureSuccessStatusCode();

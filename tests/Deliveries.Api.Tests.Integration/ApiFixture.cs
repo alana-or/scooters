@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
-using Microsoft.Extensions.Configuration;
-using NUnit.Framework;
+﻿using Microsoft.Extensions.Configuration;
 using Testcontainers.PostgreSql;
 
 [SetUpFixture]
@@ -14,21 +10,17 @@ public class PostgreSqlTestcontainerFixture
     [OneTimeSetUp]
     public async Task InitializeAsync()
     {
+        // Set up PostgreSQL container
         Testcontainer = new PostgreSqlBuilder()
-            .WithHostname("deliveries_db")
             .WithDatabase("deliveries_db")
             .WithUsername("postgres")
             .WithPassword("postgrespw")
+            .WithPortBinding(64941, 5432)
             .WithCleanUp(true)
             .Build();
-        
+
         await Testcontainer.StartAsync();
-
-        var builder = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.Tests.json")
-            .Build();
-
-        ConnectionString = builder.GetConnectionString("DefaultConnection");
+        ConnectionString = Testcontainer.GetConnectionString();
     }
 
     [OneTimeTearDown]
@@ -38,3 +30,4 @@ public class PostgreSqlTestcontainerFixture
         await Testcontainer.DisposeAsync();
     }
 }
+
