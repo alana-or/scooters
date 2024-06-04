@@ -9,6 +9,7 @@ public interface IDeliveryPersonRentalsRepository
 {
     public Task CreateAsync(DeliveryPersonRentalDb deliveryRentalDb);
     public Task UpdateAsync(DeliveryPersonRentalDb deliveryRentalDb);
+    public Task<IEnumerable<DeliveryPersonRentalDb>> GetDeliveryPersonRentalsAsync(Guid id);
 }
 
 public class DeliveryPersonRentalsRepository : IDeliveryPersonRentalsRepository
@@ -26,6 +27,7 @@ public class DeliveryPersonRentalsRepository : IDeliveryPersonRentalsRepository
     {
         try
         {
+            personRental.DeliveryPerson = null;
             _context.DeliveryPersonRentals.Add(personRental);
             await _context.SaveChangesAsync();
         }
@@ -46,6 +48,22 @@ public class DeliveryPersonRentalsRepository : IDeliveryPersonRentalsRepository
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while updating delivery rental.");
+            throw;
+        }
+    }
+
+    public async Task<IEnumerable<DeliveryPersonRentalDb>> GetDeliveryPersonRentalsAsync(Guid id)
+    {
+        try
+        {
+            return await _context.DeliveryPersonRentals
+                .Include(x => x.DeliveryPerson)
+                .Where(x => x.DeliveryPerson.Id == id)
+                .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while getting delivery person rentals.");
             throw;
         }
     }

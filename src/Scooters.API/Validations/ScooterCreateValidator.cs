@@ -9,14 +9,14 @@ public class ScooterCreateValidator : AbstractValidator<ScooterCreate>
     {
         RuleFor(model => model.Year)
             .NotEmpty()
-            .WithMessage("Deve existir Year");
+            .WithMessage("Year is missing");
 
         RuleFor(model => model.LicencePlate)
             .NotEmpty()
-            .WithMessage("Deve existir LicencePlate");
+            .WithMessage("LicencePlate is missing");
 
         RuleFor(model => model.Model)
             .NotEmpty()
-            .WithMessage("Deve existir Model");
+            .WithMessage("Model is missing");
     }
 }

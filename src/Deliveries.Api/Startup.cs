@@ -38,7 +38,7 @@ public class Startup(IConfiguration configuration)
         }
 
         services.AddScoped<IDeliveryPersonRentalsRepository, DeliveryPersonRentalsRepository>();
-        services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
+        services.AddScoped<IDeliveryPersonRepository, DeliveryPeopleRepository>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

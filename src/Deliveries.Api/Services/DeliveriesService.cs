@@ -9,12 +9,11 @@ namespace Deliveries.Api.Services;
 
 public interface IDeliveriesService
 {
-    public Task<Response<DeliveryPersonResponse>> CreatePersonAsync(DeliveryPersonCreate request);
-    public Task<Response<DeliveryPersonResponse>> UpdatePersonAsync(DeliveryPersonUpdate request);
-    public Task<Response<IEnumerable<RentalResponse>>> GetRentalsAsync(Guid request);
-    public Task<Response<RentalResponse>> CreateRentalAsync(RentalCreate request);
-    public Task<Response<IEnumerable<ScooterResponse>>> GetScootersAsync();
-    //public Task<Response<IEnumerable<DeliveryPersonRentals>>> GetDeliveryPersonRentalsAsync(Guid request);
+    public Task<Response<DeliveryPersonModel>> CreatePersonAsync(DeliveryPersonCreateModel request);
+    public Task<Response<DeliveryPersonModel>> UpdatePersonAsync(DeliveryPersonUpdateModel request);
+    public Task<Response<IEnumerable<RentalModel>>> GetPersonRentalsAsync(Guid idPerson);
+    public Task<Response<RentalModel>> CreateRentalAsync(DeliveryPersonRentalCreateModel request);
+    public Task<Response<IEnumerable<ScooterModel>>> GetScootersAsync();
 }
 
 public class DeliveriesService : IDeliveriesService
@@ -22,16 +21,18 @@ public class DeliveriesService : IDeliveriesService
     private readonly IDeliveryPersonRepository _deliveryPeople;
     private readonly IDeliveryPersonRentalsRepository _deliveryPersonRentals;
     private readonly ILogger<DeliveriesService> _logger;
-    private readonly IValidator<DeliveryPersonCreate> _validatorCreate;
-    private readonly IValidator<DeliveryPersonUpdate> _validatorUpdate;
+    private readonly IValidator<DeliveryPersonCreateModel> _validatorCreate;
+    private readonly IValidator<DeliveryPersonUpdateModel> _validatorUpdate;
+    private readonly IValidator<DeliveryPersonRentalCreateModel> _validatorRental;
     private readonly IMapper _mapper;
 
     public DeliveriesService(IDeliveryPersonRepository deliveryPeople,
         IDeliveryPersonRentalsRepository deliveryPersonRentals,
-        IValidator<DeliveryPersonCreate> validatorCreate, 
-        IValidator<DeliveryPersonUpdate> validatorUpdate,
+        IValidator<DeliveryPersonCreateModel> validatorCreate, 
+        IValidator<DeliveryPersonUpdateModel> validatorUpdate,
         ILogger<DeliveriesService> logger,
-        IMapper mapper)
+        IMapper mapper,
+        IValidator<DeliveryPersonRentalCreateModel> validatorRental)
     {
         _validatorCreate = validatorCreate;
         _validatorUpdate = validatorUpdate;
@@ -39,9 +40,10 @@ public class DeliveriesService : IDeliveriesService
         _deliveryPersonRentals = deliveryPersonRentals;
         _logger = logger;
         _mapper = mapper;
+        _validatorRental = validatorRental;
     }
 
-    public async Task<Response<DeliveryPersonResponse>> CreatePersonAsync(DeliveryPersonCreate request)
+    public async Task<Response<DeliveryPersonModel>> CreatePersonAsync(DeliveryPersonCreateModel request)
     {
         try
         {
@@ -49,9 +51,8 @@ public class DeliveriesService : IDeliveriesService
 
             if (!validation.IsValid)
             {
-                return Response<DeliveryPersonResponse>.CreateFailure("Os dados da requisição estão incorretos");
+                return Response<DeliveryPersonModel>.CreateFailure("Request has invalid data.");
             }
-
 
             var deliveryPerson = new DeliveryPerson
             (
@@ -59,23 +60,23 @@ public class DeliveriesService : IDeliveriesService
                 request.Photo
             );
 
-            var deliveryPersonDB = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
+            var deliveryPersonDb = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
 
-            await _deliveryPeople.CreateAsync(deliveryPersonDB);
+            await _deliveryPeople.CreateAsync(deliveryPersonDb);
 
-            var deliveryPersonResponse = _mapper.Map<DeliveryPersonResponse>(deliveryPersonDB);
+            var deliveryPersonResponse = _mapper.Map<DeliveryPersonModel>(deliveryPersonDb);
 
-            return Response<DeliveryPersonResponse>.CreateSuccess(deliveryPersonResponse);
-
+            return Response<DeliveryPersonModel>.CreateSuccess(deliveryPersonResponse);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while getting deliveryPersons.");
-            throw;
+            var message = "An error occurred while creating a person.";
+            _logger.LogError(ex, message);
+            return Response<DeliveryPersonModel>.CreateFailure(message);
         }
     }
 
-    public async Task<Response<DeliveryPersonResponse>> UpdatePersonAsync(DeliveryPersonUpdate request)
+    public async Task<Response<DeliveryPersonModel>> UpdatePersonAsync(DeliveryPersonUpdateModel request)
     {
         try
         {
@@ -83,101 +84,104 @@ public class DeliveriesService : IDeliveriesService
 
             if (!validation.IsValid)
             {
-                return Response<DeliveryPersonResponse>
-                    .CreateFailure("Os dados da requisição estão incorretos");
+                return Response<DeliveryPersonModel>.CreateFailure("Request has invalid data.");
             }
 
-            var deliveryPerson = new Domain.DeliveryPerson
+            var deliveryPerson = new DeliveryPerson
             (
                 request.Name,
-                request.Photo
+                request.Photo,
+                request.Id
             );
 
             var deliveryPersonDB = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
 
             await _deliveryPeople.UpdateAsync(deliveryPersonDB);
 
-            var deliveryPersonResponse = _mapper.Map<DeliveryPersonResponse>(deliveryPersonDB);
+            var deliveryPersonResponse = _mapper.Map<DeliveryPersonModel>(deliveryPersonDB);
 
-            return Response<DeliveryPersonResponse>.CreateSuccess(deliveryPersonResponse);
+            return Response<DeliveryPersonModel>.CreateSuccess(deliveryPersonResponse);
 
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while getting deliveryPersons.");
-            throw;
+            var message = "An error occurred while updating a person.";
+            _logger.LogError(ex, message);
+            return Response<DeliveryPersonModel>.CreateFailure(message);
         }
     }
 
-    public async Task<Response<IEnumerable<ScooterResponse>>> GetScootersAsync()
+    public async Task<Response<IEnumerable<ScooterModel>>> GetScootersAsync()
     {
         try
         {
-            var response = new List<ScooterResponse>();
-            return Response<IEnumerable<ScooterResponse>>.CreateSuccess(response);
+            var response = new List<ScooterModel>();
+            return Response<IEnumerable<ScooterModel>>.CreateSuccess(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while getting scooters.");
-            return Response<IEnumerable<ScooterResponse>>.CreateFailure(ex.Message);
+            var message = "An error occurred while getting scooters.";
+            _logger.LogError(ex, message);
+            return Response<IEnumerable<ScooterModel>>.CreateFailure(message);
         }
     }
 
-    //public async Task<Response<IEnumerable<DeliveryPersonRentals>>> GetDeliveryPersonRentalsAsync(Guid request)
-    //{
-    //    try
-    //    {
-    //        var response = await _deliveryPersonRentals.get(request);
-    //        var rentals = _mapper.Map<IEnumerable<Rental>>(response);
-
-    //        return Response<IEnumerable<Rental>>.CreateSuccess(rentals);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.Error(ex, "An error occurred while getting rentals.");
-    //        return Response<IEnumerable<Rental>>.CreateFailure(ex.Message);
-    //    }
-    //}
-
-    public async Task<Response<RentalResponse>> CreateRentalAsync(RentalCreate request)
+    public async Task<Response<RentalModel>> CreateRentalAsync(DeliveryPersonRentalCreateModel request)
     {
         try
         {
-            //var validation = _validatorCreate.Validate(request);
+            var validation = _validatorRental.Validate(request);
 
-            //if (!validation.IsValid)
-            //{
-            //    return Response<DeliveryPerson>.CreateFailure("Os dados da requisição estão incorretos");
-            //}
+            if (!validation.IsValid)
+            {
+                return Response<RentalModel>.CreateFailure("Request has invalid data.");
+            }
 
+            var deliveryPesonDb = await _deliveryPeople.GetDeliveryPersonAsync(request.DeliveryPersonId);
+
+            var deliveryPerson = _mapper.Map<DeliveryPerson>(deliveryPesonDb);
+
+            //validar dados para fazer aluguel
             var deliveryRental = new DeliveryPersonRental
             (
                 request.Scooter.Id,
                 request.Scooter.Year,
                 request.Scooter.Model,
                 request.Scooter.LicencePlate,
-                new DeliveryPerson(request.DeliveryPerson.Name, 
-                    request.DeliveryPerson.Photo)
+                deliveryPerson
             );
 
             var deliveryRentalDb = _mapper.Map<DeliveryPersonRentalDb>(deliveryRental);
 
             await _deliveryPersonRentals.CreateAsync(deliveryRentalDb);
 
-            var deliveryRentalResponse = _mapper.Map<RentalResponse>(deliveryRentalDb);
+            var deliveryRentalResponse = _mapper.Map<RentalModel>(deliveryRentalDb);
 
-            return Response<RentalResponse>.CreateSuccess(deliveryRentalResponse);
-
+            return Response<RentalModel>.CreateSuccess(deliveryRentalResponse);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while getting deliveryPersons.");
-            throw;
+            var message = "An error occurred while creating rental.";
+            _logger.LogError(ex, message);
+            return Response<RentalModel>.CreateFailure(message);
         }
     }
 
-    public Task<Response<IEnumerable<RentalResponse>>> GetRentalsAsync(Guid request)
+    public async Task<Response<IEnumerable<RentalModel>>> GetPersonRentalsAsync(Guid idPerson)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var rentals = await _deliveryPersonRentals.GetDeliveryPersonRentalsAsync(idPerson);
+
+            var deliveryRentalResponse = _mapper.Map<IEnumerable<RentalModel>>(rentals);
+
+            return Response<IEnumerable<RentalModel>>.CreateSuccess(deliveryRentalResponse);
+        }
+        catch (Exception ex)
+        {
+            var message = "An error occurred while getting rentals.";
+            _logger.LogError(ex, message);
+            return Response<IEnumerable<RentalModel>>.CreateFailure(message);
+        }
     }
 }

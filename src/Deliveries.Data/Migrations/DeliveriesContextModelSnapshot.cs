@@ -66,13 +66,14 @@ namespace Deliveries.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("model");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("integer")
-                        .HasColumnName("year");
-
-                    b.Property<Guid>("scooterId")
+                    b.Property<Guid>("ScooterId")
                         .HasColumnType("uuid")
                         .HasColumnName("scooter-id");
+
+                    b.Property<int>("Year")
+                        .HasMaxLength(4)
+                        .HasColumnType("integer")
+                        .HasColumnName("year");
 
                     b.HasKey("Id");
 

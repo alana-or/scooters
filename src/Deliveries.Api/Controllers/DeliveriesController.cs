@@ -11,7 +11,7 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
     private readonly IDeliveriesService _service = service;
 
     [HttpPost("rentals/create")]
-    public async Task<IActionResult> CreateRental([FromBody] RentalCreate rental)
+    public async Task<IActionResult> CreateRentalAsync([FromBody] DeliveryPersonRentalCreateModel rental)
     {
         var response = await _service.CreateRentalAsync(rental);
 
@@ -23,10 +23,10 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
         return BadRequest(response.Message);
     }
 
-    [HttpGet("rentals")]
-    public async Task<IActionResult> GetRentals([FromBody] Guid personId)
+    [HttpGet("rentals/{personId}")]
+    public async Task<IActionResult> GetRentalsAsync(Guid personId)
     {
-        var response = await _service.GetRentalsAsync(personId);
+        var response = await _service.GetPersonRentalsAsync(personId);
 
         if (response.Success)
         {
@@ -37,7 +37,7 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
     }
 
     [HttpGet("scooters")]
-    public async Task<IActionResult> GetScooters()
+    public async Task<IActionResult> GetScootersAsync()
     {
         var response = await _service.GetScootersAsync();
 
@@ -49,8 +49,8 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
         return BadRequest(response.Message);
     }
 
-    [HttpPost("Create")]
-    public async Task<IActionResult> Create([FromBody] DeliveryPersonCreate deliveryPerson)
+    [HttpPost("person/create")]
+    public async Task<IActionResult> CreatePersonAsync([FromBody] DeliveryPersonCreateModel deliveryPerson)
     {
         var response = await _service.CreatePersonAsync(deliveryPerson);
      
@@ -62,8 +62,8 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
         return BadRequest(response.Message);
     }
 
-    [HttpPut("Put")]
-    public async Task<IActionResult> Put([FromBody] DeliveryPersonUpdate deliveryPerson)
+    [HttpPut("person/update")]
+    public async Task<IActionResult> UpdatePersonAsync([FromBody] DeliveryPersonUpdateModel deliveryPerson)
     {
         var response = await _service.UpdatePersonAsync(deliveryPerson);
 
@@ -73,13 +73,5 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
         }
 
         return BadRequest(response.Message);
-    }
-
-    [HttpDelete("Delete")]
-    public IActionResult Delete(DeliveryPersonCreate deliveryPerson)
-    {
-        //grava no banco
-
-        return Ok();
     }
 }

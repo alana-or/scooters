@@ -2,6 +2,7 @@
 
 public class ScooterUpdate
 {
+    public int Id { get; set; }
     public int Year { get; set; }
     public string Model { get; set; }
     public string LicencePlate { get; set; }

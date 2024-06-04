@@ -15,15 +15,15 @@ public class DeliveriesMapper : Profile
         CreateMap<DeliveryPersonRentalDb, DeliveryPersonRental>()
             .ReverseMap();
 
-        CreateMap<DeliveryPersonResponse, DeliveryPersonDb>()
+        CreateMap<DeliveryPersonModel, DeliveryPersonDb>()
             .ReverseMap();
 
-        CreateMap<ScooterResponse, DeliveryPersonDb>()
+        CreateMap<ScooterModel, DeliveryPersonDb>()
             .ReverseMap();
 
-        CreateMap<RentalResponse, DeliveryPersonRentalDb>()
+        CreateMap<RentalModel, DeliveryPersonRentalDb>()
             .ForPath(x => x.DeliveryPerson, opt => opt.MapFrom(s => s.DeliveryPerson))
-            .ForPath(x => x.scooterId, opt => opt.MapFrom(s => s.Scooter.Id))
+            .ForPath(x => x.ScooterId, opt => opt.MapFrom(s => s.Scooter.Id))
             .ForPath(x => x.Year, opt => opt.MapFrom(s => s.Scooter.Year))
             .ForPath(x => x.Model, opt => opt.MapFrom(s => s.Scooter.Model))
             .ForPath(x => x.LicencePlate, opt => opt.MapFrom(s => s.Scooter.LicencePlate))

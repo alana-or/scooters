@@ -8,9 +8,9 @@ public class DeliveryPerson
 
     public string Photo { get; private set; }
 
-    public DeliveryPerson(string name, string photo)
+    public DeliveryPerson(string name, string photo, Guid id = new Guid())
     {
-        Id = new Guid();
+        Id = id;
         Name = name;
         Photo = photo;
     }

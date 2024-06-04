@@ -11,8 +11,8 @@ public class DeliveryPersonBuilder
     {
         delivery = new AutoFaker<DeliveryPersonDb>()
             .RuleFor(m => m.Id, new Guid())
-            .RuleFor(m => m.Name, f => f.Random.String2(1, 100))
-            .RuleFor(m => m.Photo, f => f.Random.String2(1, 100))
+            .RuleFor(m => m.Name, f => f.Random.String2(1, 10))
+            .RuleFor(m => m.Photo, f => f.Random.String2(1, 10))
             .Generate();
     }
 
@@ -20,8 +20,8 @@ public class DeliveryPersonBuilder
     {
         return new AutoFaker<DeliveryPersonDb>()
             .RuleFor(m => m.Id, new Guid())
-            .RuleFor(m => m.Name, f => f.Random.String2(1, 100))
-            .RuleFor(m => m.Photo, f => f.Random.String2(1, 100))
+            .RuleFor(m => m.Name, f => f.Random.String2(1, 10))
+            .RuleFor(m => m.Photo, f => f.Random.String2(1, 10))
             .Generate(quant);
     }
 

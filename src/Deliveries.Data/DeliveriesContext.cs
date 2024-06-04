@@ -38,7 +38,7 @@ public class DeliveriesContext : DbContext
         {
             entity.HasKey(m => m.Id);
             entity.Property(m => m.Year).IsRequired().HasMaxLength(4);
-            entity.Property(m => m.scooterId).IsRequired();
+            entity.Property(m => m.ScooterId).IsRequired();
             entity.Property(m => m.LicencePlate).IsRequired();
             entity.Property(m => m.Model).IsRequired();
         });

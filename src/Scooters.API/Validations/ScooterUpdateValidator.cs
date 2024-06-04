@@ -7,16 +7,20 @@ public class ScooterUpdateValidator : AbstractValidator<ScooterUpdate>
 {
     public ScooterUpdateValidator()
     {
-        RuleFor(model => model.Year)
+        RuleFor(model => model.Id)
             .NotEmpty()
-            .WithMessage("Deve existir Year");
-
-        RuleFor(model => model.LicencePlate)
-            .NotEmpty()
-            .WithMessage("Deve existir LicencePlate");
+            .WithMessage("Id is missing");
 
         RuleFor(model => model.Model)
             .NotEmpty()
-            .WithMessage("Deve existir Model");
+            .WithMessage("Name is missing");
+
+        RuleFor(model => model.Year)
+            .NotEmpty()
+            .WithMessage("Year is missing");
+
+        RuleFor(model => model.LicencePlate)
+            .NotEmpty()
+            .WithMessage("LicencePlate is missing");
     }
 }

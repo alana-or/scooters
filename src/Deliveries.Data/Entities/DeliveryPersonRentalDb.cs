@@ -12,7 +12,7 @@ public class DeliveryPersonRentalDb
     
     [Required]
     [Column("scooter-id")]
-    public Guid scooterId { get; set; }
+    public Guid ScooterId { get; set; }
 
     [Required]
     [Column("year")]
@@ -27,6 +27,8 @@ public class DeliveryPersonRentalDb
     public string LicencePlate { get; set; }
 
     [Required]
-    [Column("delivery-person-id")]
-    public DeliveryPersonDb DeliveryPerson { get; set; }
+    [ForeignKey("delivery-person-id")]
+    public Guid DeliveryPersonId { get; set; }
+
+    public virtual DeliveryPersonDb DeliveryPerson { get; set; }
 }
