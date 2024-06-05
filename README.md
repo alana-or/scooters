@@ -8,21 +8,21 @@ Projeto usado para adicionar mais scooters ao sistema
 
 ### Scooters.Api
 Contém implementação de chamadas HTTP/S
-- Scooters.Data
-- Scooters.Application
+- ***Scooters.Data***
+- ***Scooters.Application***
 - AutoMapper
 - FluentValidation
 - Rabbitmq.Client
 
 ### Scooters.Consumer
 Comtém implementação do Worker que ouve tópicos do Rabbitmq
-- Scooters.Application
-- Scooters.Data
+- ***Scooters.Application***
+- ***Scooters.Data***
 - Rabbitmq.Client
 
 ### Scooters.Data
 Contém implementação de repositórios, migrações e builders
-- Scooters.Domain
+- ***Scooters.Domain***
 - AutoBogus
 - EntityFrameworkCore
 - Npgsql.EntityFrameworkCore.PostgreSQL
@@ -34,14 +34,14 @@ Projeto usado para adicionar Deliveries Person e Rentals
 
 ### Deliveries.Api
 Contém implementação de chamadas HTTP/S
-- Deliveries.Application
-- Deliveries.Data
+- ***Deliveries.Application***
+- ***Deliveries.Data***
 - AutoMapper
 - FluentValidation
 
 ### Deliveries.Data
 Contém implementação de repositórios, migrações e builders
-- Deliveries.Application
+- ***Deliveries.Application***
 - AutoBogus
 - EntityFrameworkCore
 - Npgsql.EntityFrameworkCore.PostgreSQL
@@ -50,7 +50,7 @@ Contém implementação de repositórios, migrações e builders
 
 ### Deliveries.Application
 Contém serviços, modelos, mapeamentos, dtos, etc
-- Deliveries.Domain
+- ***Deliveries.Domain***
 
 ### Deliveries.Domain
 Contém classes de domínio, enums, etc
