@@ -1,5 +1,5 @@
 > [!CAUTION]
-> 2 projetos na mesma solução Scooters e Deliveries, só para não precisar separar agora, mas num cenário real devem estar em repositórios diferentes
+> Todos os projetos estão na mesma solução só para não precisar separar agora, mas num cenário real devem estar em repositórios diferentes
 
 [<img src="https://github.com/alana-or/scooters/assets/19328250/e5edfb46-a7f6-4524-9b8e-6a5deb1a0634" width="500"/>](https://github.com/alana-or/scooters/assets/19328250/e5edfb46-a7f6-4524-9b8e-6a5deb1a0634)
 
