@@ -5,11 +5,11 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B587E9F8-BE76-469D-B34F-47D0CEA38FC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scooters.Api", "src\Scooters.API\Scooters.Api.csproj", "{4104E1FD-3331-4F86-A318-1D654EA8FE24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scooters.Api", "src\Scooters\Scooters.API\Scooters.Api.csproj", "{4104E1FD-3331-4F86-A318-1D654EA8FE24}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scooters.Consumer", "src\Scooters.Consumer\Scooters.Consumer.csproj", "{6760797D-560D-4C86-A550-AB865506E007}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scooters.Consumer", "src\Scooters\Scooters.Consumer\Scooters.Consumer.csproj", "{6760797D-560D-4C86-A550-AB865506E007}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scooters.Data", "src\Scooters.Data\Scooters.Data.csproj", "{E5745B1A-7C42-4632-8144-FFCE4A060A08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scooters.Data", "src\Scooters\Scooters.Data\Scooters.Data.csproj", "{E5745B1A-7C42-4632-8144-FFCE4A060A08}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens da solution", "Itens da solution", "{C0EAAFF5-604A-4057-B365-CECF4BBEE610}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,9 +22,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E1B2CC84
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scooters.Data.Tests.Integration", "tests\Scooters.Data.Tests\Scooters.Data.Tests.Integration.csproj", "{993676D4-E74B-48B8-AEC2-A2BC145EBF1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Api", "src\Deliveries.Api\Deliveries.Api.csproj", "{3FAAB724-72FF-4254-A8B3-D2E1FFC093C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Api", "src\Deliveries\Deliveries.Api\Deliveries.Api.csproj", "{3FAAB724-72FF-4254-A8B3-D2E1FFC093C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Data", "src\Deliveries.Data\Deliveries.Data.csproj", "{17C1D3AA-FE34-47DC-AF9F-9CF1C99ED919}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Data", "src\Deliveries\Deliveries.Data\Deliveries.Data.csproj", "{17C1D3AA-FE34-47DC-AF9F-9CF1C99ED919}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Data.Tests.Integration", "tests\Deliveries.Data.Tests\Deliveries.Data.Tests.Integration.csproj", "{085C55E5-B107-4FAB-8EF1-D07337ED8FC1}"
 EndProject
@@ -38,9 +38,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deliveries", "Deliveries", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scooters", "Scooters", "{EF7D7F88-2466-4D63-910B-2A0408F3AC39}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Application", "src\Deliveries.Application\Deliveries.Application.csproj", "{37E3D8A3-989D-47D8-ABAF-0C3A0FE99F75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Application", "src\Deliveries\Deliveries.Application\Deliveries.Application.csproj", "{37E3D8A3-989D-47D8-ABAF-0C3A0FE99F75}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Domain", "src\Deliveries.Domain\Deliveries.Domain.csproj", "{45827852-0EF5-4BB2-A859-E5203647BE08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Domain", "src\Deliveries\Deliveries.Domain\Deliveries.Domain.csproj", "{45827852-0EF5-4BB2-A859-E5203647BE08}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliveries.Domain.Tests.Unit", "tests\Deliveries.Api.Tests.Unit\Deliveries.Domain.Tests.Unit.csproj", "{24027502-51B2-437F-B3B1-EA3A79E858A2}"
 EndProject
