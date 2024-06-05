@@ -25,6 +25,8 @@ Contém implementação de repositórios, migrações e builders
 - EntityFrameworkCore
 - Npgsql.EntityFrameworkCore.PostgreSQL
 
+```dotnet ef migrations add InitialCreate -p Scooters.Data -c ScootersContext```
+
 # Deliveries 
 Projeto usado para adicionar Deliveries Person e Rentals
 
@@ -42,6 +44,8 @@ Contém implementação de repositórios, migrações e builders
 - EntityFrameworkCore
 - Npgsql.EntityFrameworkCore.PostgreSQL
 
+```dotnet ef migrations add InitialCreate -p Deliveries.Data -c DeliveriesContext```
+
 ### Deliveries.Application
 Contém serviços, modelos, mapeamentos, dtos, etc
 - Deliveries.Domain
@@ -53,7 +57,13 @@ Contém classes de domínio, enums, etc
 Inicializa todos os projetos e suas dependencias, cada projeto tem sua network
 
 # Testes
-
+Cada projeto de testes de integração sobe seu próprio container Postgres para testes e roda as migrações antes de executar os testes
+- FluentAssertions
+- Moq
+- NUnit
+- Testcontainers
+- Testcontainers.PostgreSql
+  
 > Projetos da camada de infraestrutura e interface adapters contém projetos de testes de integração
 
 > Projetos de applicação e domínio tem testes de unidade
