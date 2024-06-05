@@ -1,7 +1,7 @@
 > [!CAUTION]
 > Todos os projetos estão na mesma solução só para não precisar separar agora, mas num cenário real devem estar em repositórios diferentes
 
-[<img src="https://github.com/alana-or/scooters/assets/19328250/e5edfb46-a7f6-4524-9b8e-6a5deb1a0634" width="500"/>](https://github.com/alana-or/scooters/assets/19328250/e5edfb46-a7f6-4524-9b8e-6a5deb1a0634)
+[<img src="https://github.com/alana-or/scooters/assets/19328250/6b7c61af-a0e8-43b9-840b-14a537d1ac27" width="1000"/>](https://github.com/alana-or/scooters/assets/19328250/6b7c61af-a0e8-43b9-840b-14a537d1ac27)
 
 # Scooters
 Projeto usado para adicionar mais scooters ao sistema
