@@ -1,8 +1,9 @@
 ﻿using Deliveries.Api;
 using Deliveries.Api.Services;
+using Deliveries.Application;
+using Deliveries.Application.Dtos;
 using Deliveries.Data;
 using Deliveries.Data.Builders;
-using Deliveries.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +40,7 @@ public class ApiFixture
                     options.UseNpgsql(_testcontainer.GetConnectionString()).EnableDetailedErrors());
 
                 services.AddScoped<IDeliveryPersonRentalsRepository, DeliveryPersonRentalsRepository>();
-                services.AddScoped<IDeliveryPersonRepository, DeliveryPeopleRepository>();
+                services.AddScoped<IDeliveryPeopleRepository, DeliveryPeopleRepository>();
                 services.AddScoped<IDeliveriesService, DeliveriesService>();
 
             });
@@ -52,7 +53,7 @@ public class ApiFixture
         var dbContext = scope.ServiceProvider.GetRequiredService<DeliveriesContext>();
         dbContext.Database.Migrate();
 
-        var deliveries = new DeliveryPersonRentalsBuilder().Generate(5);
+        var deliveries = new DeliveryPersonRentalDbBuilder().Generate(5);
 
         await dbContext.DeliveryPersonRentals.AddRangeAsync(deliveries);
         await dbContext.SaveChangesAsync();

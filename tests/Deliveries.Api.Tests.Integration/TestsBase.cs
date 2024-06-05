@@ -1,4 +1,4 @@
-﻿using Deliveries.Data.Entities;
+﻿using Deliveries.Application.Dtos;
 
 [TestFixture]
 public class TestsBase

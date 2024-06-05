@@ -1,4 +1,4 @@
-using Deliveries.Api.Models;
+using Deliveries.Application.Models;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 using Newtonsoft.Json;

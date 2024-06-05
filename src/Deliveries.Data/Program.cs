@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Deliveries.Application.Mappers;
+using Deliveries.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Deliveries.Data;
 
 class Program
 {
@@ -12,6 +14,7 @@ class Program
             {
                 config.SetMinimumLevel(LogLevel.Information);
             })
+            .AddAutoMapper(typeof(DeliveriesMapper))
             .AddDbContext<DeliveriesContext>(options =>
                 options.UseNpgsql("Host=deliveries_db;Port=5432;Username=postgres;Password=postgrespw;Database=deliveries_db;Search Path=public"))
             .BuildServiceProvider();

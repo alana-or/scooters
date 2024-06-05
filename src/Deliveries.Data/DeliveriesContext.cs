@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Deliveries.Data.Entities;
+﻿using Deliveries.Application.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Deliveries.Data;
 

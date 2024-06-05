@@ -1,5 +1,5 @@
-﻿using Deliveries.Api.Models;
-using Deliveries.Api.Services;
+﻿using Deliveries.Application;
+using Deliveries.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deliveries.Controllers;

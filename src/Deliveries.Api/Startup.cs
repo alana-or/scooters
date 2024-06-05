@@ -1,11 +1,12 @@
 ﻿using Deliveries.Api.Services;
 using Deliveries.Api.Validations;
+using Deliveries.Application;
+using Deliveries.Application.Mappers;
 using Deliveries.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System;
 
 namespace Deliveries.Api;
 
@@ -38,9 +39,9 @@ public class Startup(IConfiguration configuration)
         }
 
         services.AddScoped<IDeliveryPersonRentalsRepository, DeliveryPersonRentalsRepository>();
-        services.AddScoped<IDeliveryPersonRepository, DeliveryPeopleRepository>();
+        services.AddScoped<IDeliveryPeopleRepository, DeliveryPeopleRepository>();
 
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddAutoMapper(typeof(DeliveriesMapper));
 
         services.AddControllers();
 

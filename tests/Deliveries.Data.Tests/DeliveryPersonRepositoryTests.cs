@@ -1,10 +1,13 @@
+using AutoMapper;
+using Deliveries.Application;
+using Deliveries.Application.Mappers;
+using Deliveries.Data.Builders;
+using Deliveries.Domain;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Deliveries.Data.Builders;
-using Deliveries.Data.Entities;
 using Testcontainers.PostgreSql;
 
 namespace Deliveries.Data.Tests;
@@ -15,6 +18,7 @@ public class DeliveryPersonRepositoryTests
     private PostgreSqlContainer _postgresContainer;
     private ServiceProvider _serviceProvider;
     private Mock<ILogger<DeliveryPeopleRepository>> _loggerMock;
+    private IMapper _mapper;
 
     [OneTimeSetUp]
     public async Task OneTimeSetup()
@@ -32,6 +36,14 @@ public class DeliveryPersonRepositoryTests
         await _postgresContainer.StartAsync();
 
         var services = new ServiceCollection();
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<DeliveriesMapper>();
+        });
+
+        _mapper = mapperConfig.CreateMapper();
+
+        services.AddSingleton<IMapper>(_mapper);
 
         services.AddSingleton(_loggerMock.Object);
 
@@ -42,7 +54,7 @@ public class DeliveryPersonRepositoryTests
 
         services.AddDbContext<DeliveriesContext>(options =>
             options.UseNpgsql(_postgresContainer.GetConnectionString()));
-        services.AddScoped<IDeliveryPersonRepository, DeliveryPeopleRepository>();
+        services.AddScoped<IDeliveryPeopleRepository, DeliveryPeopleRepository>();
 
         _serviceProvider = services.BuildServiceProvider();
 
@@ -65,7 +77,7 @@ public class DeliveryPersonRepositoryTests
     {
         using (var _scope = _serviceProvider.CreateScope())
         {
-            var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPersonRepository>();
+            var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPeopleRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<DeliveriesContext>();
 
             var delivery = new DeliveryPersonBuilder().Build();
@@ -84,11 +96,11 @@ public class DeliveryPersonRepositoryTests
     {
         using (var _scope = _serviceProvider.CreateScope())
         {
-            var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPersonRepository>();
+            var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPeopleRepository>();
 
             DisposeDataBase(_scope);
 
-            Func<Task> act = async () => await _deliveries.CreateAsync(new DeliveryPersonDb());
+            Func<Task> act = async () => await _deliveries.CreateAsync(new DeliveryPersonBuilder().Build());
 
             await act.Should().ThrowAsync<Exception>();
             VerifyThrowExeption("An error occurred while creating delivery person.", LogLevel.Error, Times.Once());
@@ -98,21 +110,29 @@ public class DeliveryPersonRepositoryTests
     [Test]
     public async Task Update_Should_Update_DeliveryPerson()
     {
+        var deliveryPersonDb = new DeliveryPersonDbBuilder().Build();
+
         using (var _scope = _serviceProvider.CreateScope())
         {
-            var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPersonRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<DeliveriesContext>();
-           
-            var deliveryPerson = new DeliveryPersonBuilder().Build();
 
-            _context.DeliveryPeople.Add(deliveryPerson);
+            _context.DeliveryPeople.Add(deliveryPersonDb);
             await _context.SaveChangesAsync();
+        }
 
-            deliveryPerson.Name = "New Name";
-            deliveryPerson.CNHImage = "New Photo";
+        using (var _scope = _serviceProvider.CreateScope())
+        {
+            var _context = _scope.ServiceProvider.GetRequiredService<DeliveriesContext>();
+            var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPeopleRepository>();
+
+            deliveryPersonDb.Name = "New Name";
+            deliveryPersonDb.CNHImage = "New Photo";
+
+            var deliveryPerson = _mapper.Map<DeliveryPerson>(deliveryPersonDb);
+
             await _deliveries.UpdateAsync(deliveryPerson);
 
-            var updatedDeliveryPerson = await _context.DeliveryPeople.FindAsync(deliveryPerson.Id);
+            var updatedDeliveryPerson = await _context.DeliveryPeople.FindAsync(deliveryPersonDb.Id);
 
             updatedDeliveryPerson.Name.Should().Be("New Name");
             updatedDeliveryPerson.CNHImage.Should().Be("New Photo");
@@ -124,11 +144,11 @@ public class DeliveryPersonRepositoryTests
     {
         using (var _scope = _serviceProvider.CreateScope())
         {
-            var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPersonRepository>();
+            var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPeopleRepository>();
 
             DisposeDataBase(_scope);
 
-            Func<Task> act = async () => await _deliveries.UpdateAsync(new DeliveryPersonDb());
+            Func<Task> act = async () => await _deliveries.UpdateAsync(new DeliveryPersonBuilder().Build());
 
             await act.Should().ThrowAsync<Exception>();
             VerifyThrowExeption("An error occurred while updating delivery person.", LogLevel.Error, Times.Once());

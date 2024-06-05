@@ -1,24 +1,14 @@
 ﻿using AutoMapper;
-using Deliveries.Api.Domain;
-using Deliveries.Api.Models;
-using Deliveries.Data;
-using Deliveries.Data.Entities;
+using Deliveries.Application;
+using Deliveries.Application.Models;
+using Deliveries.Domain;
 using FluentValidation;
 
 namespace Deliveries.Api.Services;
 
-public interface IDeliveriesService
-{
-    public Task<Response<DeliveryPersonModel>> CreatePersonAsync(DeliveryPersonCreateModel request);
-    public Task<Response<DeliveryPersonModel>> UpdatePersonAsync(DeliveryPersonUpdateModel request);
-    public Task<Response<IEnumerable<RentalModel>>> GetPersonRentalsAsync(Guid idPerson);
-    public Task<Response<RentalModel>> CreateRentalAsync(DeliveryPersonRentalCreateModel request);
-    public Task<Response<IEnumerable<ScooterModel>>> GetScootersAsync();
-}
-
 public class DeliveriesService : IDeliveriesService
 {
-    private readonly IDeliveryPersonRepository _deliveryPeople;
+    private readonly IDeliveryPeopleRepository _deliveryPeople;
     private readonly IDeliveryPersonRentalsRepository _deliveryPersonRentals;
     private readonly ILogger<DeliveriesService> _logger;
     private readonly IValidator<DeliveryPersonCreateModel> _validatorCreate;
@@ -26,7 +16,7 @@ public class DeliveriesService : IDeliveriesService
     private readonly IValidator<DeliveryPersonRentalCreateModel> _validatorRental;
     private readonly IMapper _mapper;
 
-    public DeliveriesService(IDeliveryPersonRepository deliveryPeople,
+    public DeliveriesService(IDeliveryPeopleRepository deliveryPeople,
         IDeliveryPersonRentalsRepository deliveryPersonRentals,
         IValidator<DeliveryPersonCreateModel> validatorCreate, 
         IValidator<DeliveryPersonUpdateModel> validatorUpdate,
@@ -64,11 +54,9 @@ public class DeliveriesService : IDeliveriesService
                 request.Birth
             );
 
-            var deliveryPersonDb = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
+            await _deliveryPeople.CreateAsync(deliveryPerson);
 
-            await _deliveryPeople.CreateAsync(deliveryPersonDb);
-
-            var deliveryPersonResponse = _mapper.Map<DeliveryPersonModel>(deliveryPersonDb);
+            var deliveryPersonResponse = _mapper.Map<DeliveryPersonModel>(deliveryPerson);
 
             return Response<DeliveryPersonModel>.CreateSuccess(deliveryPersonResponse);
         }
@@ -91,17 +79,13 @@ public class DeliveriesService : IDeliveriesService
                 return Response<DeliveryPersonModel>.CreateFailure("Request has invalid data.");
             }
 
-            var deliveryPesonDb = await _deliveryPeople.GetDeliveryPersonAsync(request.Id);
-
-            var deliveryPerson = _mapper.Map<DeliveryPerson>(deliveryPesonDb);
+            var deliveryPerson = await _deliveryPeople.GetDeliveryPersonAsync(request.Id);
 
             deliveryPerson.UpdateCNHImage(request.CNHImage);
 
-            var deliveryPersonDB = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
+            await _deliveryPeople.UpdateAsync(deliveryPerson);
 
-            await _deliveryPeople.UpdateAsync(deliveryPersonDB);
-
-            var deliveryPersonResponse = _mapper.Map<DeliveryPersonModel>(deliveryPersonDB);
+            var deliveryPersonResponse = _mapper.Map<DeliveryPersonModel>(deliveryPerson);
 
             return Response<DeliveryPersonModel>.CreateSuccess(deliveryPersonResponse);
 
@@ -155,11 +139,9 @@ public class DeliveriesService : IDeliveriesService
 
             deliveryRental.CreateRental(request.EndExpected);
 
-            var deliveryRentalDb = _mapper.Map<DeliveryPersonRentalDb>(deliveryRental);
+            await _deliveryPersonRentals.CreateAsync(deliveryRental);
 
-            await _deliveryPersonRentals.CreateAsync(deliveryRentalDb);
-
-            var deliveryRentalResponse = _mapper.Map<RentalModel>(deliveryRentalDb);
+            var deliveryRentalResponse = _mapper.Map<RentalModel>(deliveryRental);
 
             return Response<RentalModel>.CreateSuccess(deliveryRentalResponse);
         }

@@ -1,34 +1,34 @@
-﻿using Bogus;
-using Deliveries.Data.Entities;
+﻿using AutoMapper;
+using Deliveries.Application;
+using Deliveries.Application.Dtos;
+using Deliveries.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Deliveries.Data;
 
-public interface IDeliveryPersonRepository
-{
-    public Task CreateAsync(DeliveryPersonDb person);
-    public Task UpdateAsync(DeliveryPersonDb person);
-    public Task<DeliveryPersonDb> GetDeliveryPersonAsync(Guid guid);
-}
-
-public class DeliveryPeopleRepository : IDeliveryPersonRepository
+public class DeliveryPeopleRepository : IDeliveryPeopleRepository
 {
     private readonly DeliveriesContext _context;
     private readonly ILogger<DeliveryPeopleRepository> _logger;
+    private readonly IMapper _mapper;
 
     public DeliveryPeopleRepository(DeliveriesContext context, 
-        ILogger<DeliveryPeopleRepository> logger)
+        ILogger<DeliveryPeopleRepository> logger,
+        IMapper mapper)
     {
         _logger = logger;
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task CreateAsync(DeliveryPersonDb person)
+    public async Task CreateAsync(DeliveryPerson person)
     {
         try
         {
-            _context.DeliveryPeople.Add(person);
+            var deliveryPersonDB = _mapper.Map<DeliveryPersonDb>(person);
+
+            _context.DeliveryPeople.Add(deliveryPersonDB);
             await _context.SaveChangesAsync();
         }
         catch(Exception ex) 
@@ -38,21 +38,23 @@ public class DeliveryPeopleRepository : IDeliveryPersonRepository
         }
     }
 
-    public async Task UpdateAsync(DeliveryPersonDb person)
+    public async Task UpdateAsync(DeliveryPerson person)
     {
         try
         {
-            _context.DeliveryPeople.Update(person);
+            var deliveryPersonDB = _mapper.Map<DeliveryPersonDb>(person);
+
+            _context.DeliveryPeople.Update(deliveryPersonDB);
             await _context.SaveChangesAsync();
         }
-        catch(Exception ex) 
+        catch (Exception ex) 
         {
             _logger.LogError(ex, "An error occurred while updating delivery person.");
             throw;
         }
     }
 
-    public async Task<DeliveryPersonDb> GetDeliveryPersonAsync(Guid personId)
+    public async Task<DeliveryPerson> GetDeliveryPersonAsync(Guid personId)
     {
         try
         {
@@ -60,8 +62,8 @@ public class DeliveryPeopleRepository : IDeliveryPersonRepository
                 .DeliveryPeople
                 .AsNoTracking()
                 .FirstAsync(x => x.Id == personId);
-            
-            return person;
+
+            return _mapper.Map<DeliveryPerson>(person); 
         }
         catch (Exception ex)
         {

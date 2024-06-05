@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Deliveries.Api.Models;
+using Deliveries.Application.Models;
 
 namespace Deliveries.Api.Validations;
 
