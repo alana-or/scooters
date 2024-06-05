@@ -169,7 +169,11 @@ public class ScootersRepositoryTests
 
             var scooters = new ScooterBuilder().Generate(5);
 
-            var specificScooter = new ScooterDB { Id = 112, Year = 2023, Model = "Specific Model", LicencePlate = "ABC123" };
+            var specificScooter = new ScooterBuilder()
+                .SetLicencePlate("ABC123")
+                .SetModel("Specific Model")
+                .Build();
+
             scooters.Add(specificScooter);
 
             _context.Scooters.AddRange(scooters);
