@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Deliveries.Data.Migrations
 {
     [DbContext(typeof(DeliveriesContext))]
-    [Migration("20240604220330_InitialCreate")]
+    [Migration("20240605001505_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -32,17 +32,39 @@ namespace Deliveries.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("Birth")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("birth");
+
+                    b.Property<string>("CNH")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)")
+                        .HasColumnName("cnh");
+
+                    b.Property<string>("CNHImage")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("cnh-image");
+
+                    b.Property<string>("CNHType")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("char(1)")
+                        .HasColumnName("cnh-type");
+
+                    b.Property<string>("CNPJ")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)")
+                        .HasColumnName("cnpj");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("name");
-
-                    b.Property<string>("Photo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("photo");
 
                     b.HasKey("Id");
 

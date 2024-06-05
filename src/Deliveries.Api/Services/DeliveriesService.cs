@@ -57,7 +57,11 @@ public class DeliveriesService : IDeliveriesService
             var deliveryPerson = new DeliveryPerson
             (
                 request.Name,
-                request.Photo
+                request.CNHImage,
+                request.CNPJ,
+                request.CNH,
+                request.CNHType,
+                request.Birth
             );
 
             var deliveryPersonDb = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
@@ -87,12 +91,11 @@ public class DeliveriesService : IDeliveriesService
                 return Response<DeliveryPersonModel>.CreateFailure("Request has invalid data.");
             }
 
-            var deliveryPerson = new DeliveryPerson
-            (
-                request.Name,
-                request.Photo,
-                request.Id
-            );
+            var deliveryPesonDb = await _deliveryPeople.GetDeliveryPersonAsync(request.Id);
+
+            var deliveryPerson = _mapper.Map<DeliveryPerson>(deliveryPesonDb);
+
+            deliveryPerson.UpdateCNHImage(request.CNHImage);
 
             var deliveryPersonDB = _mapper.Map<DeliveryPersonDb>(deliveryPerson);
 

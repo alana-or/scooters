@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using Deliveries.Api.Models;
+﻿using Deliveries.Api.Models;
+using FluentValidation;
 
 namespace Deliveries.Api.Validations;
 
@@ -11,8 +11,17 @@ public class DeliveryPersonCreateValidator : AbstractValidator<DeliveryPersonCre
             .NotEmpty()
             .WithMessage("Name is missing");
 
-        RuleFor(model => model.Photo)
+        RuleFor(model => model.CNHImage)
             .NotEmpty()
-            .WithMessage("Photo is missing");
+            .WithMessage("CNHImage is missing");
+
+        RuleFor(model => model.CNHType)
+            .NotEmpty().WithMessage("CNHType is required.")
+            .Must(BeAorB).WithMessage("CNHType must be A or B.");
+    }
+
+    private bool BeAorB(char cnhType)
+    {
+        return cnhType == 'A' || cnhType == 'B';
     }
 }

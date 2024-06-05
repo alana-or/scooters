@@ -9,7 +9,7 @@ public class DeliveriesContext : DbContext
     public DeliveriesContext(DbContextOptions<DeliveriesContext> options)
         : base(options)
     {
-
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
     public DbSet<DeliveryPersonDb> DeliveryPeople { get; set; }
@@ -31,7 +31,12 @@ public class DeliveriesContext : DbContext
         {
             entity.HasKey(m => m.Id);
             entity.Property(m => m.Name).IsRequired().HasMaxLength(20);
-            entity.Property(m => m.Photo).IsRequired();
+            entity.Property(m => m.CNHImage).IsRequired();
+            entity.Property(m => m.CNPJ).IsRequired();
+            entity.Property(m => m.CNH).IsRequired();
+            entity.Property(m => m.CNHType).IsRequired();
+            entity.Property(m => m.Birth).IsRequired()
+                .HasColumnType("timestamp with time zone");
         });
 
         modelBuilder.Entity<DeliveryPersonRentalDb>(entity =>

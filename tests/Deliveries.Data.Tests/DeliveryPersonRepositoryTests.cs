@@ -68,14 +68,14 @@ public class DeliveryPersonRepositoryTests
             var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPersonRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<DeliveriesContext>();
 
-            var delivery = new DeliveryPersonDb { Id = new Guid(), Name = "name", Photo = "photo"};
+            var delivery = new DeliveryPersonBuilder().Build();
 
             await _deliveries.CreateAsync(delivery);
 
             var updatedDelivery = await _context.DeliveryPeople.FindAsync(delivery.Id);
 
-            updatedDelivery.Name.Should().Be("name");
-            updatedDelivery.Photo.Should().Be("photo");
+            updatedDelivery.Name.Should().Be(delivery.Name);
+            updatedDelivery.CNHImage.Should().Be(delivery.CNHImage);
         }
     }
 
@@ -102,19 +102,20 @@ public class DeliveryPersonRepositoryTests
         {
             var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPersonRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<DeliveriesContext>();
+           
+            var deliveryPerson = new DeliveryPersonBuilder().Build();
 
-            var deliveryPerson = new DeliveryPersonDb { Id = new Guid(), Name = "name", Photo = "photo"};
             _context.DeliveryPeople.Add(deliveryPerson);
             await _context.SaveChangesAsync();
 
             deliveryPerson.Name = "New Name";
-            deliveryPerson.Photo = "New Photo";
+            deliveryPerson.CNHImage = "New Photo";
             await _deliveries.UpdateAsync(deliveryPerson);
 
             var updatedDeliveryPerson = await _context.DeliveryPeople.FindAsync(deliveryPerson.Id);
 
             updatedDeliveryPerson.Name.Should().Be("New Name");
-            updatedDeliveryPerson.Photo.Should().Be("New Photo");
+            updatedDeliveryPerson.CNHImage.Should().Be("New Photo");
         }
     }
 

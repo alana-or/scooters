@@ -17,7 +17,11 @@ namespace Deliveries.Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    photo = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    cnhimage = table.Column<string>(name: "cnh-image", type: "varchar(100)", maxLength: 100, nullable: false),
+                    cnpj = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
+                    cnh = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
+                    cnhtype = table.Column<string>(name: "cnh-type", type: "char(1)", maxLength: 1, nullable: false),
+                    birth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {

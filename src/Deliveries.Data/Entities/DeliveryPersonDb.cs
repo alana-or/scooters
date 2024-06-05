@@ -11,12 +11,31 @@ public class DeliveryPersonDb
     public Guid Id { get; set; }
 
     [Required]
-    [MaxLength(100)]
+    [StringLength(20)]
     [Column("name")]
     public string Name { get; set; }
 
     [Required]
-    [MaxLength(100)]
-    [Column("photo")]
-    public string Photo { get; set; }
+    [StringLength(100)]
+    [Column("cnh-image", TypeName = "varchar(100)")]
+    public string CNHImage { get; set; }
+
+    [Required]
+    [StringLength(11)]
+    [Column("cnpj", TypeName = "varchar(11)")]
+    public string CNPJ { get; set; }
+
+    [Required]
+    [StringLength(11)]
+    [Column("cnh", TypeName = "varchar(11)")]
+    public string CNH { get; set; }
+
+    [Required]
+    [StringLength(1)]
+    [Column("cnh-type", TypeName = "char(1)")]
+    public string CNHType { get; set; }
+
+    [Required]
+    [Column("birth", TypeName = "timestamp without time zone")]
+    public DateTime Birth { get; set; }
 }

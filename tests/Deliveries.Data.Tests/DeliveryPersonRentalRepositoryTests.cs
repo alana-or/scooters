@@ -67,10 +67,14 @@ public class DeliveryPersonRentalRepositoryTests
         {
             var _deliveries = _scope.ServiceProvider.GetRequiredService<IDeliveryPersonRentalsRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<DeliveriesContext>();
+            var person = new DeliveryPersonBuilder().Build();
+            _context.DeliveryPeople.Add(person);
+            await _context.SaveChangesAsync();
 
             var delivery = new DeliveryPersonRentalDb { 
                 Id = new Guid(), 
-                DeliveryPerson = new DeliveryPersonDb() { Name = "name", Photo = "photo"},
+                DeliveryPersonId = person.Id,
+                DeliveryPerson = person,
                 LicencePlate = "LicencePlate",
                 Model = "Model",
                 Year = 2023,
@@ -84,8 +88,8 @@ public class DeliveryPersonRentalRepositoryTests
             updatedDeliveryRental.Model.Should().Be("Model");
             updatedDeliveryRental.Year.Should().Be(2023);
             updatedDeliveryRental.LicencePlate.Should().Be("LicencePlate");
-            updatedDeliveryRental.DeliveryPerson.Name.Should().Be("name");
-            updatedDeliveryRental.DeliveryPerson.Photo.Should().Be("photo");
+            updatedDeliveryRental.DeliveryPerson.Name.Should().Be(person.Name);
+            updatedDeliveryRental.DeliveryPerson.CNHImage.Should().Be(person.CNHImage);
         }
     }
 
@@ -116,7 +120,7 @@ public class DeliveryPersonRentalRepositoryTests
             var delivery = new DeliveryPersonRentalDb
             {
                 Id = new Guid(),
-                DeliveryPerson = new DeliveryPersonDb() { Name = "name", Photo = "photo" },
+                DeliveryPerson = new DeliveryPersonBuilder().Build(),
                 LicencePlate = "LicencePlate",
                 Model = "Model",
                 Year = 2023,

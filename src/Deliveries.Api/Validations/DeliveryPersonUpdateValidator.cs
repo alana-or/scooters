@@ -11,12 +11,8 @@ public class DeliveryPersonUpdateValidator : AbstractValidator<DeliveryPersonUpd
             .NotEmpty()
             .WithMessage("Id is missing");
 
-        RuleFor(model => model.Name)
+        RuleFor(model => model.CNHImage)
             .NotEmpty()
-            .WithMessage("Name is missing");
-
-        RuleFor(model => model.Photo)
-            .NotEmpty()
-            .WithMessage("Photo is missing");
+            .WithMessage("CNHImage is missing");
     }
 }

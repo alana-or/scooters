@@ -58,6 +58,7 @@ public class DeliveryPeopleRepository : IDeliveryPersonRepository
         {
             var person = await _context
                 .DeliveryPeople
+                .AsNoTracking()
                 .FirstAsync(x => x.Id == personId);
             
             return person;

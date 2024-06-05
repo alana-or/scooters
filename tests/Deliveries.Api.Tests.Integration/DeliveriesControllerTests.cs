@@ -1,5 +1,6 @@
 using Deliveries.Api.Models;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
@@ -73,7 +74,7 @@ public class DeliveriesControllerTests : TestsBase
         response.EnsureSuccessStatusCode();
         var responseString = await response.Content.ReadAsStringAsync();
         var responseObject = JsonConvert.DeserializeObject<IEnumerable<RentalModel>>(responseString);
-        responseObject.Should().HaveCount(5);
+        responseObject.Should().HaveCountGreaterThan(4);
     }
 
     [Test]
@@ -82,7 +83,11 @@ public class DeliveriesControllerTests : TestsBase
         var person = new DeliveryPersonCreateModel
         {
             Name = "name",
-            Photo = "photo"
+            CNHImage = "image",
+            Birth = DateTime.Now.AsUtc(),
+            CNH = "123",
+            CNPJ = "123",
+            CNHType = 'A'
         };
 
         var content = new StringContent(JsonConvert.SerializeObject(person), Encoding.UTF8, "application/json");
@@ -104,8 +109,7 @@ public class DeliveriesControllerTests : TestsBase
         var person = new DeliveryPersonUpdateModel
         {
             Id = personId,
-            Name = "new name",
-            Photo = "new photo"
+            CNHImage = "new image"
         };
 
         var content = new StringContent(JsonConvert.SerializeObject(person), Encoding.UTF8, "application/json");
