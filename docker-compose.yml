@@ -3,7 +3,7 @@ services:
     image: ${DOCKER_REGISTRY-}scooters
     build:
       context: .
-      dockerfile: src/Scooters.Api/Dockerfile
+      dockerfile: src/Scooters/Scooters.Api/Dockerfile
     depends_on:
       - scooters_db
       - scooters_rabbit
@@ -25,10 +25,9 @@ services:
     image: ${DOCKER_REGISTRY-}deliveries
     build:
       context: .
-      dockerfile: src/Deliveries.Api/Dockerfile
+      dockerfile: src/Deliveries/Deliveries.Api/Dockerfile
     depends_on:
       - deliveries_db
-      - scooters_api
     container_name: deliveries_api
     ports:
       - 5001:5001
@@ -42,7 +41,7 @@ services:
   scooters_migration:
     build:
       context: .
-      dockerfile: src/Scooters.Data/Dockerfile
+      dockerfile: src/Scooters/Scooters.Data/Dockerfile
     container_name: scooters_migration
     depends_on:
       - scooters_db
@@ -54,7 +53,7 @@ services:
   deliveries_migration:
     build:
       context: .
-      dockerfile: src/Deliveries.Data/Dockerfile
+      dockerfile: src/Deliveries/Deliveries.Data/Dockerfile
     container_name: deliveries_migration
     depends_on:
       - deliveries_db
@@ -67,7 +66,7 @@ services:
     image: ${DOCKER_REGISTRY-}scooters_consumer
     build:
       context: .
-      dockerfile: src/Scooters.Consumer/Dockerfile
+      dockerfile: src/Scooters/Scooters.Consumer/Dockerfile
     depends_on:
       - scooters_db
       - scooters_rabbit
@@ -107,7 +106,7 @@ services:
         - 5433:5432
     restart: always
     volumes:
-        - data:/var/lib/postgresql/data
+        - scooters_data:/var/lib/postgresql/data
     networks:
       - scooters_network
 
@@ -122,12 +121,13 @@ services:
       - "5434:5432"
     restart: always
     volumes:
-        - data:/var/lib/postgresql/data
+        - deliveries_data:/var/lib/postgresql/data
     networks:
       - deliveries_network
- 
+
 volumes:
-  data:    
+  scooters_data:
+  deliveries_data:
   
 networks:
   scooters_network:

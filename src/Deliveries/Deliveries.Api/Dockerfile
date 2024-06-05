@@ -8,11 +8,11 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
-RUN dotnet restore "src/Deliveries.Api/Deliveries.Api.csproj"
-RUN dotnet build "src/Deliveries.Api/Deliveries.Api.csproj" -c Release -o /app/build
+RUN dotnet restore "src/Deliveries/Deliveries.Api/Deliveries.Api.csproj"
+RUN dotnet build "src/Deliveries/Deliveries.Api/Deliveries.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "src/Deliveries.Api/Deliveries.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "src/Deliveries/Deliveries.Api/Deliveries.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

@@ -1,13 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Writers;
 using Scooters.Api.Services;
 using Scooters.Api.Validations;
 using Scooters.Data;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Soooters.Api;
 
@@ -24,7 +21,7 @@ public class Startup
 
         services.AddDbContext<ScootersContext>(options =>
             options.UseNpgsql(
-                Configuration.GetConnectionString("DefaultConnection")).EnableDetailedErrors());
+                Configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IScootersRepository, ScootersRepository>();
 
@@ -43,7 +40,7 @@ public class Startup
             options.SwaggerDoc("v1", new OpenApiInfo()
             {
                 Version = "v1",
-                Title = "Motos API",
+                Title = "Scooters API",
                 Description = "O sistema é.",
             });
         });

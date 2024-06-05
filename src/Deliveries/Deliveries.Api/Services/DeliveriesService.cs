@@ -121,7 +121,7 @@ public class DeliveriesService : IDeliveriesService
 
             if (!validation.IsValid)
             {
-                return Response<RentalModel>.CreateFailure("Request has invalid data.");
+                return Response<RentalModel>.CreateFailure($"Request has invalid data. \n {validation.Errors}");
             }
 
             var deliveryPesonDb = await _deliveryPeople.GetDeliveryPersonAsync(request.DeliveryPersonId);
