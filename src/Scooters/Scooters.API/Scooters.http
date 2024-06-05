@@ -1,6 +1,0 @@
-@Motto_HostAddress = http://localhost:5094
-
-GET {{Motto_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
