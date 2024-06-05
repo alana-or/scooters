@@ -30,7 +30,7 @@ namespace Deliveries.Data.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("Birth")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("birth");
 
                     b.Property<string>("CNH")
@@ -75,8 +75,20 @@ namespace Deliveries.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("Create")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create");
+
                     b.Property<Guid>("DeliveryPersonId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("end");
+
+                    b.Property<DateTime>("EndExpected")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expected-end");
 
                     b.Property<string>("LicencePlate")
                         .IsRequired()
@@ -91,6 +103,10 @@ namespace Deliveries.Data.Migrations
                     b.Property<Guid>("ScooterId")
                         .HasColumnType("uuid")
                         .HasColumnName("scooter-id");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start");
 
                     b.Property<int>("Year")
                         .HasMaxLength(4)

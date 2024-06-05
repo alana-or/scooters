@@ -30,5 +30,21 @@ public class DeliveryPersonRentalDb
     [ForeignKey("delivery-person-id")]
     public Guid DeliveryPersonId { get; set; }
 
+    [Required]
+    [Column("create")]
+    public DateTime Create { get; set; }
+
+    [Required]
+    [Column("start")]
+    public DateTime Start { get; set; }
+
+    [Required]
+    [Column("end")]
+    public DateTime End { get; set; }
+
+    [Required]
+    [Column("expected-end")]
+    public DateTime EndExpected { get; set; }
+
     public virtual DeliveryPersonDb DeliveryPerson { get; set; }
 }

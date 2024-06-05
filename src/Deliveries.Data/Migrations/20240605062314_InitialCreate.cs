@@ -21,7 +21,7 @@ namespace Deliveries.Data.Migrations
                     cnpj = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
                     cnh = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
                     cnhtype = table.Column<string>(name: "cnh-type", type: "char(1)", maxLength: 1, nullable: false),
-                    birth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,7 +37,11 @@ namespace Deliveries.Data.Migrations
                     year = table.Column<int>(type: "integer", maxLength: 4, nullable: false),
                     model = table.Column<string>(type: "text", nullable: false),
                     licenceplate = table.Column<string>(name: "licence-plate", type: "text", nullable: false),
-                    DeliveryPersonId = table.Column<Guid>(type: "uuid", nullable: false)
+                    DeliveryPersonId = table.Column<Guid>(type: "uuid", nullable: false),
+                    create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    end = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    expectedend = table.Column<DateTime>(name: "expected-end", type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

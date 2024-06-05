@@ -12,7 +12,7 @@ public class DeliveryPersonRental
     public DateTime Create { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-    public DateTime ExpectedEnd { get; set; }
+    public DateTime EndExpected { get; set; }
 
     public DeliveryPersonRental(Guid scooterId, int year, string model,
         string licencePlate, DeliveryPerson deliveryPerson)
@@ -33,7 +33,7 @@ public class DeliveryPersonRental
         
         Create = DateTime.Today;
         Start = DateTime.Today.AddDays(1);
-        ExpectedEnd = expectedDate;
+        EndExpected = expectedDate;
     }
 
     public void CalculateRent()
@@ -47,7 +47,7 @@ public class DeliveryPersonRental
 
     private int CalculateExcessDays(DateTime today, int rentDays)
     {
-        TimeSpan difference = today - ExpectedEnd;
+        TimeSpan difference = today - EndExpected;
         int differenceExpected = rentDays == 0 ? difference.Days + 1 : difference.Days;
         return differenceExpected;
     }

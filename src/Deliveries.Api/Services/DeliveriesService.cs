@@ -144,7 +144,6 @@ public class DeliveriesService : IDeliveriesService
 
             var deliveryPerson = _mapper.Map<DeliveryPerson>(deliveryPesonDb);
 
-            //validar dados para fazer aluguel
             var deliveryRental = new DeliveryPersonRental
             (
                 request.Scooter.Id,
@@ -153,6 +152,8 @@ public class DeliveriesService : IDeliveriesService
                 request.Scooter.LicencePlate,
                 deliveryPerson
             );
+
+            deliveryRental.CreateRental(request.EndExpected);
 
             var deliveryRentalDb = _mapper.Map<DeliveryPersonRentalDb>(deliveryRental);
 
