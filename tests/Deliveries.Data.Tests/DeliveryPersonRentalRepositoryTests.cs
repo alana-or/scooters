@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Testcontainers.PostgreSql;
 
-namespace Deliveries.Data.Tests;
+namespace Deliveries.Data.Tests.Integration;
 
 [TestFixture]
 public class DeliveryPersonRentalRepositoryTests

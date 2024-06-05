@@ -7,7 +7,7 @@ using Scooters.Data.Builders;
 using Scooters.Data.Entities;
 using Testcontainers.PostgreSql;
 
-namespace Scooters.Data.Tests;
+namespace Scooters.Data.Tests.Integration;
 
 [TestFixture]
 public class ScootersRepositoryTests
