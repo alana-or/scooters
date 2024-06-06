@@ -41,7 +41,7 @@ public class DeliveriesControllerTests : TestsBase
                 Model = "Model",
                 Year = 2024
             },
-            EndExpected = DateTime.Today.AddDays(8),
+            ExpectedEnd = DateTime.Today.AddDays(8),
         };
 
         var content = new StringContent(JsonConvert.SerializeObject(rental), Encoding.UTF8, "application/json");

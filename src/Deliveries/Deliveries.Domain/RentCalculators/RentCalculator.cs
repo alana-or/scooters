@@ -25,20 +25,9 @@ public class RentCalculator
 
     public double CalculateRent(DateTime startDate, DateTime finalDate, DateTime expectedFinalDate)
     {
-        int rentDays = CalculateRentDays(startDate, finalDate);
-        int excessDays = CalculateExcessDays(finalDate, rentDays, expectedFinalDate);
+        var rentDays = Math.Max((finalDate - startDate).Days, 1);
+        var excessDays = (finalDate - expectedFinalDate).Days;
 
         return _handler.CalculateRent(rentDays, excessDays);
-    }
-
-    private int CalculateExcessDays(DateTime finalDate, int rentDays, DateTime expectedFinalDate)
-    {
-        int differenceExpected = (finalDate - expectedFinalDate).Days;
-        return rentDays == 0 ? differenceExpected + 1 : differenceExpected;
-    }
-
-    private int CalculateRentDays(DateTime startDate, DateTime finalDate)
-    {
-        return Math.Max((finalDate - startDate).Days, 1);
     }
 }

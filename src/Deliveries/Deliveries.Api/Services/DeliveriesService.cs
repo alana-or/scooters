@@ -139,7 +139,7 @@ public class DeliveriesService : IDeliveriesService
                 deliveryPerson
             );
 
-            deliveryRental.CreateRental(request.EndExpected);
+            deliveryRental.CreateRental(request.ExpectedEnd);
 
             await _deliveryPersonRentals.CreateAsync(deliveryRental);
 
