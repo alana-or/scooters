@@ -1,7 +1,7 @@
 using Deliveries.Domain.RentCalculators;
 using FluentAssertions;
 
-namespace Deliveries.Domain.Tests.Unit;
+namespace Deliveries.Domain.Tests.Unit.RentCalculators;
 
 public class RentCalculatorTests
 {
