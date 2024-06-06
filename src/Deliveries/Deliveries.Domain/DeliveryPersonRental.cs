@@ -1,4 +1,6 @@
-﻿namespace Deliveries.Domain;
+﻿using Deliveries.Domain.RentCalculators;
+
+namespace Deliveries.Domain;
 
 public class DeliveryPersonRental
 {
@@ -12,7 +14,7 @@ public class DeliveryPersonRental
     public DateTime Create { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-    public DateTime EndExpected { get; set; }
+    public DateTime ExpectedEnd { get; set; }
 
     public DeliveryPersonRental(Guid scooterId, int year, string model,
         string licencePlate, DeliveryPerson deliveryPerson)
@@ -34,31 +36,20 @@ public class DeliveryPersonRental
 
         Create = DateTime.Today;
         Start = DateTime.Today.AddDays(1);
-        EndExpected = expectedDate;
+        ExpectedEnd = expectedDate;
+        
+        CalculateRent(expectedDate);
     }
 
-    public void CalculateRent()
+    public void ReturnRentedScooter()
     {
-        var today = DateTime.Today;
-        int rentDays = CalculateRentDays(today);
-        int excessDays = CalculateExcessDays(today, rentDays);
-        End = today;
+        End = DateTime.Today; 
 
-        RentTotal = new RentCalculator().CalculateRent(rentDays, excessDays);
+        CalculateRent(End);
     }
 
-    private int CalculateExcessDays(DateTime today, int rentDays)
+    private void CalculateRent(DateTime finalDate)
     {
-        TimeSpan difference = today - EndExpected;
-        int differenceExpected = rentDays == 0 ? difference.Days + 1 : difference.Days;
-        return differenceExpected;
-    }
-
-    private int CalculateRentDays(DateTime today)
-    {
-        TimeSpan differenceRent = today - Start;
-        int rentDays = differenceRent.Days > 0 ?
-            differenceRent.Days : 0;
-        return rentDays;
+        RentTotal = new RentCalculator().CalculateRent(Start, finalDate, ExpectedEnd);
     }
 }

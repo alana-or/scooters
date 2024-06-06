@@ -179,7 +179,7 @@ public class DeliveriesService : IDeliveriesService
         {
             var deliveryRental = _deliveryPersonRentals.GetDeliveryPersonRentals(rentalId);
 
-            deliveryRental.CalculateRent();
+            deliveryRental.ReturnRentedScooter();
 
             var deliveryRentalResponse = _mapper.Map<RentalReturnedModel>(deliveryRental);
 

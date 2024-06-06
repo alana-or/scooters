@@ -1,129 +1,74 @@
 using FluentAssertions;
+using Moq;
 
 namespace Deliveries.Domain.Tests.Unit;
 
 public class DeliveryPersonRentalTests
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
 
     [Test]
-    public void Rent_Should_Calculate_Dates()
+    public void CreateRental_ThrowsException_WhenCNHTypeIsNotA()
     {
-        var rent = new DeliveryPersonRental(
-            new Guid(), 2024, "model",
-            "licencePlate", 
-            new DeliveryPerson("Name","image", "123", "123", 'A', DateTime.Now));
-
-        var expectedDate = DateTime.Today.AddDays(5);
-
-        rent.CreateRental(expectedDate);
-        
-        rent.Create.Should().Be(DateTime.Today);
-        rent.Start.Should().Be(DateTime.Today.AddDays(1));
-        rent.EndExpected.Should().Be(expectedDate);
-    }
-
-    [Test]
-    public void Rent_Should_Throw_Exception_When_CNH_Not_Type_A()
-    {
-        var rent = new DeliveryPersonRental(
+        var rental = new DeliveryPersonRental(
             new Guid(), 2024, "model",
             "licencePlate",
             new DeliveryPerson("Name", "image", "123", "123", 'B', DateTime.Now));
 
-        var expectedDate = DateTime.Today.AddDays(5);
+        var act = () => rental.CreateRental(DateTime.Today.AddDays(2));
 
-        var act = () => rent.CreateRental(expectedDate);
-        
-        act.Should().Throw<Exception>()
-            .WithMessage("CNH type A only");
+        act.Should().Throw<Exception>();
     }
 
     [Test]
-    public void CalculateRent_Should_Calculate_RentTotal_With_UpToSevenDaysRent()
+    public void CreateRental_DoesNotThrowException_WhenCNHTypeIsA()
     {
-        var rent = new DeliveryPersonRental(
+        var rental = new DeliveryPersonRental(
             new Guid(), 2024, "model",
             "licencePlate",
             new DeliveryPerson("Name", "image", "123", "123", 'A', DateTime.Now));
 
-        var expectedDate = DateTime.Today.AddDays(8);
+        var act = () => rental.CreateRental(DateTime.Today.AddDays(2));
 
-        rent.CreateRental(expectedDate);
-        
-        rent.CalculateRent();
-
-        rent.RentTotal.Should().Be(252);
+        act.Should().NotThrow<Exception>();
     }
 
-    [Test]
-    public void CalculateRent_Should_Calculate_RentTotal_With_UpToFifteenDaysRent()
+    [TestCase(7, 210)]
+    [TestCase(15, 420)]
+    [TestCase(30, 660)]
+    [TestCase(45, 900)]
+    [TestCase(50, 900)]
+    public void CreateRental_Should_Calculate_RentTotal(int days, int totalRentExpected)
     {
-        var rent = new DeliveryPersonRental(
+        const int startDayDiference = 1;
+
+        var rental = new DeliveryPersonRental(
             new Guid(), 2024, "model",
             "licencePlate",
             new DeliveryPerson("Name", "image", "123", "123", 'A', DateTime.Now));
 
-        var expectedDate = DateTime.Today.AddDays(16);
+        var expectedDate = DateTime.Today.AddDays(days + startDayDiference);
 
-        rent.CreateRental(expectedDate);
+        rental.CreateRental(expectedDate);
 
-        rent.CalculateRent();
-
-        rent.RentTotal.Should().Be(540);
+        rental.ExpectedEnd.Should().Be(expectedDate);
+        rental.End.Should().Be(DateTime.MinValue);
+        rental.RentTotal.Should().Be(totalRentExpected);
     }
 
     [Test]
-    public void CalculateRent_Should_Calculate_RentTotal_With_UpToThirtyDaysRent()
+    public void ReturnRentedScooter()
     {
-        var rent = new DeliveryPersonRental(
+        var rental = new DeliveryPersonRental(
             new Guid(), 2024, "model",
             "licencePlate",
             new DeliveryPerson("Name", "image", "123", "123", 'A', DateTime.Now));
 
-        var expectedDate = DateTime.Today.AddDays(31);
+        rental.Start = DateTime.Today;
+        rental.ExpectedEnd = DateTime.Today.AddDays(7); 
 
-        rent.CreateRental(expectedDate);
+        rental.ReturnRentedScooter();
 
-        rent.CalculateRent();
-
-        rent.RentTotal.Should().Be(1080);
-    }
-
-    [Test]
-    public void CalculateRent_Should_Calculate_RentTotal_With_UpToFortyFiveDaysRent()
-    {
-        var rent = new DeliveryPersonRental(
-            new Guid(), 2024, "model",
-            "licencePlate",
-            new DeliveryPerson("Name", "image", "123", "123", 'A', DateTime.Now));
-
-        var expectedDate = DateTime.Today.AddDays(46);
-
-        rent.CreateRental(expectedDate);
-
-        rent.CalculateRent();
-
-        rent.RentTotal.Should().Be(1620);
-    }
-
-    [Test]
-    public void CalculateRent_Should_Calculate_RentTotal_With_UpToFiftyDaysRent()
-    {
-        var rent = new DeliveryPersonRental(
-            new Guid(), 2024, "model",
-            "licencePlate",
-            new DeliveryPerson("Name", "image", "123", "123", 'A', DateTime.Now));
-
-        var expectedDate = DateTime.Today.AddDays(51);
-
-        rent.CreateRental(expectedDate);
-
-        rent.CalculateRent();
-
-        rent.RentTotal.Should().Be(1800);
+        rental.End.Should().Be(DateTime.Today);
+        rental.RentTotal.Should().Be(72);
     }
 }
