@@ -31,11 +31,16 @@ public class UpToSevenDaysRentCalculatorHandler : RentCalculatorHandlerBase
 {
     public override double CalculateRent(int rentDays, int excessDays)
     {
-        if (rentDays <= 7)
+        var days = 7;
+        var cost = 30;
+        var extraCostPerDay = 50;
+        var penalty = 1.20;
+
+        if (rentDays <= days)
         {
-            double rentTotal = rentDays * 30;
-            rentTotal += excessDays < 0 ? excessDays * -1 * 30 * 1.20 :
-                excessDays > 0 ? excessDays * 50 : 0;
+            double rentTotal = rentDays * cost;
+            rentTotal += excessDays < 0 ? excessDays * -1 * cost * penalty :
+                excessDays > 0 ? excessDays * extraCostPerDay : 0;
 
             return rentTotal;
         }
@@ -50,11 +55,16 @@ public class UpToFifteenDaysRentCalculatorHandler : RentCalculatorHandlerBase
 {
     public override double CalculateRent(int rentDays, int excessDays)
     {
-        if (rentDays <= 15)
+        var days = 15;
+        var cost = 28;
+        var penalty = 1.40;
+        var extraCostPerDay = 50;
+
+        if (rentDays <= days)
         {
-            double rentTotal = rentDays * 28;
-            rentTotal += excessDays < 0 ? excessDays * -1 * 28 * 1.40 :
-                excessDays > 0 ? excessDays * 50 : 0;
+            double rentTotal = rentDays * cost;
+            rentTotal += excessDays < 0 ? excessDays * -1 * cost * penalty :
+                excessDays > 0 ? excessDays * extraCostPerDay : 0;
             return rentTotal;
         }
         else
@@ -68,10 +78,14 @@ public class UpToThirtyDaysRentCalculatorHandler : RentCalculatorHandlerBase
 {
     public override double CalculateRent(int rentDays, int excessDays)
     {
-        if (rentDays <= 30)
+        var days = 30;
+        var cost = 22;
+        var extraCostPerDay = 50;
+
+        if (rentDays <= days)
         {
-            double rentTotal = rentDays * 22;
-            rentTotal += excessDays > 0 ? excessDays * 50 : 0;
+            double rentTotal = rentDays * cost;
+            rentTotal += excessDays > 0 ? excessDays * extraCostPerDay : 0;
             return rentTotal;
         }
         else
@@ -85,10 +99,14 @@ public class UpToFortyFiveDaysRentCalculatorHandler : RentCalculatorHandlerBase
 {
     public override double CalculateRent(int rentDays, int excessDays)
     {
-        if (rentDays <= 45)
+        var days = 45;
+        var cost = 20;
+        var extraCostPerDay = 50;
+
+        if (rentDays <= days)
         {
-            double rentTotal = rentDays * 20;
-            rentTotal += excessDays > 0 ? excessDays * 50 : 0;
+            double rentTotal = rentDays * cost;
+            rentTotal += excessDays > 0 ? excessDays * extraCostPerDay : 0;
             return rentTotal;
         }
         else
@@ -102,10 +120,14 @@ public class UpToFiftyDaysRentCalculatorHandler : RentCalculatorHandlerBase
 {
     public override double CalculateRent(int rentDays, int excessDays)
     {
-        if (rentDays <= 50)
+        var days = 50;
+        var cost = 18;
+        var extraCostPerDay = 50;
+
+        if (rentDays <= days)
         {
-            double rentTotal = rentDays * 18;
-            rentTotal += excessDays > 0 ? excessDays * 50 : 0;
+            double rentTotal = rentDays * cost;
+            rentTotal += excessDays > 0 ? excessDays * extraCostPerDay : 0;
             return rentTotal;
         }
         else
