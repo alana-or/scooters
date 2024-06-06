@@ -32,8 +32,8 @@ public class DeliveriesContext : DbContext
             entity.HasKey(m => m.Id);
             entity.Property(m => m.Name).IsRequired().HasMaxLength(20);
             entity.Property(m => m.CNHImage).IsRequired();
-            entity.Property(m => m.CNPJ).IsRequired();
-            entity.Property(m => m.CNH).IsRequired();
+            entity.HasIndex(m => m.CNPJ).IsUnique();
+            entity.HasIndex(m => m.CNH).IsUnique();
             entity.Property(m => m.CNHType).IsRequired();
             entity.Property(m => m.Birth).IsRequired()
                 .HasColumnType("timestamp with time zone");

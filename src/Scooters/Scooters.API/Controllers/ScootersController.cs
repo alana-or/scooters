@@ -10,7 +10,7 @@ public class ScootersController(IScootersService service) : ControllerBase
 {
     private readonly IScootersService _service = service;
 
-    [HttpGet("Scooters2024")]
+    [HttpGet("scooters2024")]
     public async Task<IActionResult> GetScooters2024()
     {
         var response = await _service.GetTop5LatestMotosLogsAsync();
@@ -23,7 +23,7 @@ public class ScootersController(IScootersService service) : ControllerBase
         return BadRequest(response.Message);
     }
 
-    [HttpGet("Scooters")]
+    [HttpGet("scooters")]
     public async Task<IActionResult> Get([FromQuery] ScooterFilter scooterFilter)
     {
         var response = await _service.GetAsync(scooterFilter);
@@ -36,7 +36,7 @@ public class ScootersController(IScootersService service) : ControllerBase
         return BadRequest(response.Message);
     }
 
-    [HttpPost("Create")]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] ScooterCreate scooter)
     {
 
@@ -50,8 +50,8 @@ public class ScootersController(IScootersService service) : ControllerBase
         return BadRequest(response.Message);
     }
 
-    [HttpPut("Put")]
-    public async Task<IActionResult> Put(ScooterUpdate scooter)
+    [HttpPut("update")]
+    public async Task<IActionResult> Update(ScooterUpdate scooter)
     {
         var response = await _service.UpdateAsync(scooter);
 
@@ -63,7 +63,7 @@ public class ScootersController(IScootersService service) : ControllerBase
         return BadRequest(response.Message);
     }
 
-    [HttpDelete("Delete")]
+    [HttpDelete("delete")]
     public IActionResult Delete(ScooterCreate scooter)
     {
         //grava no banco

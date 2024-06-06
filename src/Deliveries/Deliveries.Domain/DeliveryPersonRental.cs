@@ -42,6 +42,7 @@ public class DeliveryPersonRental
         var today = DateTime.Today;
         int rentDays = CalculateRentDays(today);
         int excessDays = CalculateExcessDays(today, rentDays);
+        End = today;
 
         RentTotal = new RentCalculator().CalculateRent(rentDays, excessDays);
     }

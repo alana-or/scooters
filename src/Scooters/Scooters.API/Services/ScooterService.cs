@@ -91,8 +91,6 @@ public class ScooterService : IScootersService
 
             var scooter = new ScooterDB
             {
-                Year = request.Year,
-                Model = request.Model,
                 LicencePlate = request.LicencePlate
             };
 

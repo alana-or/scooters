@@ -10,6 +10,23 @@ namespace Deliveries.Tests.Controllers;
 public class DeliveriesControllerTests : TestsBase
 {
     [Test]
+    public async Task ReturnRentedScooter_ShouldReturnOk()
+    {
+        var rental = DeliveryPersonRentals.First();
+        
+        var content = new StringContent(JsonConvert.SerializeObject(rental.Id), Encoding.UTF8, "application/json");
+
+        var response = await Client.PostAsync("deliveries/rentals/return-scooter", content);
+
+        response.EnsureSuccessStatusCode();
+        var responseString = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<RentalReturnedModel>(responseString);
+
+        responseObject.End.Should().Be(DateTime.Today);
+        responseObject.Id.Should().Be(rental.Id);
+    }
+
+    [Test]
     public async Task CreateRentalAsync_ShouldReturnOk()
     {
         var personId = DeliveryPersonRentals.First().DeliveryPerson.Id;

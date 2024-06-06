@@ -54,7 +54,7 @@ public class DeliveryPersonRentalsRepository : IDeliveryPersonRentalsRepository
         }
     }
 
-    public async Task<IEnumerable<DeliveryPersonRental>> GetDeliveryPersonRentalsAsync(Guid id)
+    public async Task<IEnumerable<DeliveryPersonRental>> GetDeliveryPersonRentalsByDeliveryPersonIdAsync(Guid id)
     {
         try
         {
@@ -64,6 +64,24 @@ public class DeliveryPersonRentalsRepository : IDeliveryPersonRentalsRepository
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<DeliveryPersonRental>>(deliveryRental);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while getting delivery person rentals.");
+            throw;
+        }
+    }
+
+    public DeliveryPersonRental GetDeliveryPersonRentals(Guid id)
+    {
+        try
+        {
+            var deliveryRental = _context
+                .DeliveryPersonRentals
+                    .Include(x => x.DeliveryPerson)
+                .FirstOrDefault(x => x.Id == id);
+
+            return _mapper.Map<DeliveryPersonRental>(deliveryRental);
         }
         catch (Exception ex)
         {

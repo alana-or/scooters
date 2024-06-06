@@ -10,6 +10,19 @@ public class DeliveriesController(IDeliveriesService service) : ControllerBase
 {
     private readonly IDeliveriesService _service = service;
 
+    [HttpPost("rentals/return-scooter")]
+    public IActionResult ReturnRentedScooter([FromBody] Guid rentalId)
+    {
+        var response = _service.ReturnRentedScooter(rentalId);
+
+        if (response.Success)
+        {
+            return Ok(response.Data);
+        }
+
+        return BadRequest(response.Message);
+    }
+
     [HttpPost("rentals/create")]
     public async Task<IActionResult> CreateRentalAsync([FromBody] DeliveryPersonRentalCreateModel rental)
     {

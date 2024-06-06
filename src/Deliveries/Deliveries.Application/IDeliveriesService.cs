@@ -9,4 +9,5 @@ public interface IDeliveriesService
     public Task<Response<IEnumerable<RentalModel>>> GetPersonRentalsAsync(Guid idPerson);
     public Task<Response<RentalModel>> CreateRentalAsync(DeliveryPersonRentalCreateModel request);
     public Task<Response<IEnumerable<ScooterModel>>> GetScootersAsync();
+    public Response<RentalReturnedModel> ReturnRentedScooter(Guid rental);
 }

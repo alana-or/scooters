@@ -31,7 +31,7 @@ public class ScootersContext : DbContext
         {
             entity.HasKey(m => m.Id);
             entity.Property(m => m.Model).IsRequired().HasMaxLength(100);
-            entity.Property(m => m.LicencePlate).IsRequired().HasMaxLength(20);
+            entity.HasIndex(m => m.LicencePlate).IsUnique();
             entity.Property(m => m.Year).IsRequired();
         });
 

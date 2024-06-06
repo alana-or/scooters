@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Bogus;
 using Deliveries.Application;
+using Deliveries.Application.Dtos;
 using Deliveries.Application.Models;
 using Deliveries.Domain;
 using FluentValidation;
@@ -157,9 +159,9 @@ public class DeliveriesService : IDeliveriesService
     {
         try
         {
-            var rentals = await _deliveryPersonRentals.GetDeliveryPersonRentalsAsync(idPerson);
+            var deliveryPersonRentals = await _deliveryPersonRentals.GetDeliveryPersonRentalsByDeliveryPersonIdAsync(idPerson);
 
-            var deliveryRentalResponse = _mapper.Map<IEnumerable<RentalModel>>(rentals);
+            var deliveryRentalResponse = _mapper.Map<IEnumerable<RentalModel>>(deliveryPersonRentals);
 
             return Response<IEnumerable<RentalModel>>.CreateSuccess(deliveryRentalResponse);
         }
@@ -168,6 +170,26 @@ public class DeliveriesService : IDeliveriesService
             var message = "An error occurred while getting rentals.";
             _logger.LogError(ex, message);
             return Response<IEnumerable<RentalModel>>.CreateFailure(message);
+        }
+    }
+
+    public Response<RentalReturnedModel> ReturnRentedScooter(Guid rentalId)
+    {
+        try
+        {
+            var deliveryRental = _deliveryPersonRentals.GetDeliveryPersonRentals(rentalId);
+
+            deliveryRental.CalculateRent();
+
+            var deliveryRentalResponse = _mapper.Map<RentalReturnedModel>(deliveryRental);
+
+            return Response<RentalReturnedModel>.CreateSuccess(deliveryRentalResponse);
+        }
+        catch (Exception ex)
+        {
+            var message = "An error occurred while getting rentals.";
+            _logger.LogError(ex, message);
+            return Response<RentalReturnedModel>.CreateFailure(message);
         }
     }
 }

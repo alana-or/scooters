@@ -15,6 +15,9 @@ public class DeliveriesMapper : Profile
         CreateMap<DeliveryPersonRental, DeliveryPersonRentalDb>()
             .ReverseMap();
 
+        CreateMap<DeliveryPersonRental, RentalReturnedModel>()
+            .ReverseMap();
+
         CreateMap<DeliveryPersonModel, DeliveryPerson>()
             .ForMember(dest => dest.CNHType, opt => opt.MapFrom(src => src.CNHType == 'A' ? CNH.A : CNH.B))
             .ReverseMap()
