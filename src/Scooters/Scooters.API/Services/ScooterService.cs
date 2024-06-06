@@ -63,7 +63,9 @@ public class ScooterService : IScootersService
 
             await _scooters.CreateAsync(scooterDB);
 
-            scooter.Publish();
+            scooter
+                .SetId(scooterDB.Id)
+                .Publish();
 
             return Response<ScooterDB>.CreateSuccess(scooterDB);
 

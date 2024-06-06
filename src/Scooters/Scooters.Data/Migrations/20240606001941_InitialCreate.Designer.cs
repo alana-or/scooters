@@ -12,8 +12,8 @@ using Scooters.Data;
 namespace Scooters.Data.Migrations
 {
     [DbContext(typeof(ScootersContext))]
-    [Migration("20240528021909_Initial")]
-    partial class Initial
+    [Migration("20240606001941_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,7 @@ namespace Scooters.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("LicencePlate")
@@ -57,7 +57,7 @@ namespace Scooters.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("Message")

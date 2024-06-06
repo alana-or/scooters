@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Scooters.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace Scooters.Data.Migrations
                 name: "scooters",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     year = table.Column<int>(type: "integer", nullable: false),
                     model = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     licence_plate = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false)

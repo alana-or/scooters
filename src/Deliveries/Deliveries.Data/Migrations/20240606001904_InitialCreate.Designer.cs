@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Deliveries.Data.Migrations
 {
     [DbContext(typeof(DeliveriesContext))]
-    [Migration("20240605062314_InitialCreate")]
+    [Migration("20240606001904_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace Deliveries.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Deliveries.Data.Entities.DeliveryPersonDb", b =>
+            modelBuilder.Entity("Deliveries.Application.Dtos.DeliveryPersonDb", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,7 +71,7 @@ namespace Deliveries.Data.Migrations
                     b.ToTable("delivery_person");
                 });
 
-            modelBuilder.Entity("Deliveries.Data.Entities.DeliveryPersonRentalDb", b =>
+            modelBuilder.Entity("Deliveries.Application.Dtos.DeliveryPersonRentalDb", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,9 +123,9 @@ namespace Deliveries.Data.Migrations
                     b.ToTable("deliveries_rental");
                 });
 
-            modelBuilder.Entity("Deliveries.Data.Entities.DeliveryPersonRentalDb", b =>
+            modelBuilder.Entity("Deliveries.Application.Dtos.DeliveryPersonRentalDb", b =>
                 {
-                    b.HasOne("Deliveries.Data.Entities.DeliveryPersonDb", "DeliveryPerson")
+                    b.HasOne("Deliveries.Application.Dtos.DeliveryPersonDb", "DeliveryPerson")
                         .WithMany()
                         .HasForeignKey("DeliveryPersonId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -24,9 +24,9 @@ namespace Scooters.Data.Migrations
 
             modelBuilder.Entity("Scooters.Data.Entities.ScooterDB", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("LicencePlate")
@@ -52,9 +52,9 @@ namespace Scooters.Data.Migrations
 
             modelBuilder.Entity("Scooters.Data.Entities.ScooterLog2024", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("Message")

@@ -6,7 +6,7 @@ public class Scooter
 {
     private readonly IEventPublisher _eventPublisher;
 
-    public int Id { get; private set; }
+    public Guid Id { get; private set; }
 
     public int Year { get; private set; }
 
@@ -14,9 +14,9 @@ public class Scooter
 
     public string LicencePlate { get; private set; }
 
-    public Scooter(int year, string model, string licencePlate, IEventPublisher eventPublisher)
+    public Scooter(int year, string model, string licencePlate, IEventPublisher eventPublisher, Guid guid = new Guid())
     {
-        Id = 0;
+        Id = guid;
         Year = year;
         Model = model;
         LicencePlate = licencePlate;
@@ -29,5 +29,11 @@ public class Scooter
         {
             _eventPublisher.Publish(this); 
         }
+    }
+
+    internal Scooter SetId(Guid id)
+    {
+        this.Id = id;
+        return this;
     }
 }

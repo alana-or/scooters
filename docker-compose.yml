@@ -43,6 +43,7 @@ services:
       context: .
       dockerfile: src/Scooters/Scooters.Data/Dockerfile
     container_name: scooters_migration
+    command: sh -c "exit 0"
     depends_on:
       - scooters_db
     environment:
@@ -55,6 +56,7 @@ services:
       context: .
       dockerfile: src/Deliveries/Deliveries.Data/Dockerfile
     container_name: deliveries_migration
+    command: sh -c "exit 0"
     depends_on:
       - deliveries_db
     environment:

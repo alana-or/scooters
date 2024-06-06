@@ -70,7 +70,7 @@ public class ScootersRepositoryTests
             var _scooters = _scope.ServiceProvider.GetRequiredService<IScootersRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<ScootersContext>();
 
-            var scooter = new ScooterDB { Id = 10, Year = 2023, Model = "Model", LicencePlate = "123" };
+            var scooter = new ScooterDB { Id = new Guid(), Year = 2023, Model = "Model", LicencePlate = "123" };
 
             await _scooters.CreateAsync(scooter);
 
@@ -106,7 +106,7 @@ public class ScootersRepositoryTests
             var _scooters = _scope.ServiceProvider.GetRequiredService<IScootersRepository>();
             var _context = _scope.ServiceProvider.GetRequiredService<ScootersContext>();
 
-            var scooter = new ScooterDB { Id = 10, Year = 2023, Model = "Old Model", LicencePlate = "OLD123" };
+            var scooter = new ScooterDB { Id = new Guid(), Year = 2023, Model = "Old Model", LicencePlate = "OLD123" };
             _context.Scooters.Add(scooter);
             await _context.SaveChangesAsync();
 
